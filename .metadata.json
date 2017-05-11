@@ -1,0 +1,12 @@
+{
+    "author": "N. Regnault",
+    "affiliation": "LPNHE",
+    "email": "nicolas.regnault@lpnhe.in2p3.fr",
+    "title": "On the cadence of the LSST SN survey(s)",
+    "description": "Design notes, metrics and forecasts for the deep and wide LSST SN surveys.",
+    "repo_name": "sn_cadence",
+    "serial_number": "0000",
+    "short_title": "SN cadence",
+    "folder_name": "lsst_sn_cadence",
+    "default_format": "tex"
+}
