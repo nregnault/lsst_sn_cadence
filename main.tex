@@ -112,24 +112,24 @@ its lightcurve.
 \paragraph{Fiducial SN~Ia parameter space region} Up to a good
 approximation, SNe~Ia form a 2-dimensional family, that may be indexed
 for example with color and lightcurve-width (for example, the
-SALT2-color and the SALT2-$X1$-parameter).  On figure
+SALT2-color and the SALT2-$X_1$-parameter).  On figure
 \ref{fig:jla_X1_C}, we show the distribution of the JLA supernovae, in
-the $(X1,C)$ parameter space. We note sizeable differences between the
-nearby and distant SNe, in particular in X1.  However, the full JLA
-sample is well contained in the region $X1 = [-3,3], Color= = [-0.3,
+the $(X_1,C)$ parameter space. We note sizeable differences between the
+nearby and distant SNe, in particular in $X_1$.  However, the full JLA
+sample is well contained in the region $X_1 = [-3,3], Color= = [-0.3,
 0.3]$. 
 
 \begin{figure}[t]
 \begin{center}
 \includegraphics[width=0.75\linewidth]{sn_parameter_space.pdf}
-\caption{JLA supernovae the $(X1,Color)$ parameter space -- (blue:
+\caption{JLA supernovae the $(X_1,Color)$ parameter space -- (blue:
   nearby, green: SDSS, orange: SNLS).  }
 \label{fig:jla_X1_C}
 \end{center}
 \end{figure}
 
 On the same figure, we have marked in red the faintest SN in that
-parameter space ($X1=-3, Color=0.3$). To be complete up to $z_{lim}$,
+parameter space ($X_1=-3, Color=0.3$). To be complete up to $z_{lim}$,
 the survey has to deliver a cadence that allows to derive a luminosity
 distance and a photometric identification for that event at a redshift
 $z_{lim}$.
@@ -164,69 +164,141 @@ requirements are as follows:
   uncertainty of the amplitude of the lightcurve shape. 
 \end{itemize}
 
-
 Our goal is to make sure that the light curves of our faintest
-$(X1=-3, C=0.3)$ SNe~Ia around $z = z_{lim}$ pass these requirements.
-
-
-
-
-
-
-
-% There are a number of useful \LaTeX\xspace commands predefined in
-% \code{macros.tex}.  Notice that the section labels are prefixed with
-% \code{sec:} to allow the use of the \verb=\secref= command to
-% reference a section (\ie, \secref{intro}).  Figures can be referenced
-% with the \verb=\figref= command, which assumes that the figure label
-% is prefixed with \code{fig:}.  In \figref{example} we show an example
-% figure.  You'll notice that the actual figure file is found in the
-% \code{figures} directory.  However, because we have specified this
-% directory in our \verb=\graphicspath= we do not need to explicitly
-% specify the path to the image.
-
-% The \code{macros.tex} package also contains some conventional
-% scientific units like \angstrom, \GeV, \Msun, etc. and some editorial
-% tools for highlighting \FIXME{issues}, \CHECK{text to be checked},
-% \COMMENT{comments}, and \NEW{new additions}.
+$(X_1=-3, C=0.3)$ SNe~Ia around $z = z_{lim}$ pass these requirements.
 
 
 % ----------------------------------------------------------------------
 
-\section{A simple metric to evaluate a cadence}
+\section{A metric to evaluate a cadence}
 \label{sec:methods}
 
+\subsection{The signal-to-noise on the light-curve amplitude}
+
+In this section, we present a metric 
+
+If we fit a model $A \times \ell(t)$ on a lightcurve $(t_i, y_i)$, the
+least square estimate of the amplitude is:
+\begin{equation}
+  \hat{A} = \frac{\sum_i w_i \ell_i y_i}{\sum_i w_i \ell^2_i}
+\end{equation}
+where we note $\ell(t_i) = \ell_i$. The  variance of $\hat{A}$ is:
+\begin{equation}
+  \mathrm{Var}(\hat{A}) = \left(\sum_i w_i \ell^2_i\right)^{-1}
+\end{equation}
+and signal to noise we get on the amplitude $\hat{A} /
+\sigma_{\hat{A}}$ is:
+\begin{equation}
+  SNR = \left(\sum_i w_i L^2_i\right)^{1/2}
+\end{equation}
+where $L_i = A \times \ell_i$. Since we are dominated by the sky
+background, the
+\begin{equation}
+  SNR = 5 \times \left(\sum_i L^2_i f^{-2}_{i|5}\right)^{1/2}
+\end{equation}
+This metrics is easy to compute, all it takes is a tabulated model of
+the light curve shape, and a cadence file, containing, for each visit,
+an assessment of the $5\sigma$-depth reached during that visit. 
 
 
-% Similar to the figure before, here we have included a table of data
-% from \code{tables/table.tex}.  Notice that again we are able to
-% reference \tabref{example} with the \verb=\tabref= command using the
-% \code{tab:} prefix.  Also notice that we haven't needed to specify the
-% full path to the table because in the \code{Makefile} we include
-% \code{./tables} directory in the \code{\$TEXINPUTS} environment
-% variable.
+\subsection{Requirements on the survey cadence and depth}
 
-% \input{table}
+Using the metric above, we can give characterize the cadence and depth
+that allow to fulfill the requirements above. 
 
-% Equations appear as follows, and can be referred to as, for example, \eqnref{example} -- just as for tables, we use the \verb=\eqnref= command using the \code{eqn:} prefix.
-% \begin{equation}
-%   \label{eqn:example}
-%   \langle f(k) \rangle = \frac{ \sum_{t=0}^{N}f(t,k) }{N}
-% \end{equation}
+Let's define $\delta(t_i) = \delta_i$, which is equal to the number of
+observations in an interval $\Delta t$ around $t_i$. The metric above
+can be rewritten:
+\begin{equation}
+  SNR = 5 \times \left(\sum_i \delta_i L^2_i f^{-2}_{i|5} \Delta t\right)^{1/2}
+\end{equation}
+where the sum runs on all the $\Delta t$ bins, in a observer frame
+time interval covering the supernova lightcurve evolution. The requirement 
+above can be rewritten:
+\begin{equation}
+  f_{|5} \left<\delta_i\right>^{-1/2} \leq \frac{5 \sqrt{\Delta t} \sqrt{\sum_i L_i^2}}{SNR}
+  \label{eqn:global_metric}
+\end{equation}
+where $\left<\delta_i\right>$ is the cadence, weighted by the light
+curve shape squared: $\left<\delta_i\right> = \sum_i \delta_i
+L_i^2/\sum_i L_i^2$.  This sets a limit (in $\frac{e^-}{s}
+\sqrt{day}$) on the product of the limiting flux times inverse square
+root of the cadence.
+
+This simple metric allows one to estimate the power of a cadence
+without having to generate and fit supernova light curves.  Of course,
+a supernova scientist is still needed, to compute the numerical values
+of the upper limits that appears in equation \ref{eqn:global_metric}
+For the records, we report these values in table
+\ref{tab:cadence_depth_limit}. They have been computed with SALT-2.4
+and the SMTN-002 instrument model.
+
+
+
+\begin{table}[t]
+\begin{center}
+\caption{cadence-depth limit for the worst case SN and a target SNR=20/band}
+\label{tab:cadence_depth_limit}
+\begin{tabular}{l|rrrrr}
+\hline
+\hline
+    $z$   &      $g$         &       $r$         &     $i$           &      $z$        &      $y$           \\
+          &      \multicolumn{5}{c}{$[\mathrm{e^-/s \times \sqrt{day}}]$} \\
+\hline
+     0.4  &      86 &     267 &     279 &         &           \\
+     0.5  &      31 &     153 &     148 &         &           \\
+     0.6  &      12 &      81 &      94 &      92 &           \\
+     0.7  &         &      42 &      69 &      57 &      34   \\
+     0.8  &         &      17 &      52 &      39 &      25   \\
+     0.9  &         &      11 &      32 &      31 &      17   \\
+     1.1  &         &         &      11 &      20 &      11   \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
 
 
 % ----------------------------------------------------------------------
 \section{The DEEP LSST SN survey}
 
+We now apply these two metrics 
+
 \subsection{The DDF cadence from \code{Minion\_1016}}
 \label{sec:results}
 
-% \figref{example} shows an example figure, referred to with the \verb=\figref= command and the \code{fig:} prefix.
 
-% \begin{figure}
-% \includegraphics[width=0.9\columnwidth]{example.png}
-% \caption{An example figure: the LSST DESC logo, copied from \code{texmf/logos/desc-logo.png} into \code{figures/example.png}. \label{fig:example}}
-% \end{figure}
+
+
+\begin{figure*}
+\begin{center}
+\subfigure[$r$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_r.pdf}}
+\subfigure[$i$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_i.pdf}}\\
+\subfigure[$z$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_z.pdf}}
+\subfigure[$y$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_y.pdf}}
+\caption{The cadence {\em vs.} depth requirements for the DDF LSST SN
+  survey in the $r,i,z$ and $y$-bands. The color scale corresponds to
+  the metric described in equation \ref{eqn:global_metric}.  The lines are
+  the contour-levels computed for the limits indicated on table
+  \ref{tab:cadence_depth_limit}. To fulfill the SNR requirements at a
+  given redshift, one has to be {\em below} the corresponding
+  line. The stars indicate an ambitious -- but attainable -- goal for
+  a DDF survey.  The red crosses show what the survey can currently
+  deliver according to \code{Minion\_1016}. }
+\label{fig:m5_cadence_limits_ddf}
+\end{center}
+\end{figure*}
+
+
+
+\begin{figure*}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{metric_DD_290.pdf}
+    \caption{}
+  \end{center}
+\end{figure*}
+
+
 
 
 % ----------------------------------------------------------------------
@@ -234,8 +306,35 @@ $(X1=-3, C=0.3)$ SNe~Ia around $z = z_{lim}$ pass these requirements.
 \subsection{The cadence from \code{Minion\_1016}}
 \label{sec:results}
 
-% \figref{example} shows an example figure, referred to with the \verb=\figref= command and the \code{fig:} prefix.
+\begin{figure*}
+\begin{center}
+\subfigure[$g$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_wide_g.pdf}}
+\subfigure[$r$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_wide_r.pdf}}\\
+\subfigure[$i$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_wide_i.pdf}}
+\subfigure[$z$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_wide_z.pdf}}
+\caption{The cadence {\em vs.} depth requirements for the Wide survey,
+  in the $g, r, i$ and $z$-bands. The color scale corresponds to the
+  metric described in equation \ref{eqn:global_metric}.  The lines are
+  the contour-levels computed for the limits indicated on table
+  \ref{tab:cadence_depth_limit}. To fulfill the SNR requirements at a
+  given redshift, one has to be {\em below} the corresponding
+  line. The stars indicate an ambitious -- but attainable -- goal for
+  a DDF survey.  The red crosses show what the survey can currently
+  deliver according to \code{Minion\_1016}.}
+\label{fig:m5_cadence_limits_wide}
+\end{center}
+\end{figure*}
 
+\begin{figure*}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{metric_WFD_309.pdf}
+    \caption{}
+  \end{center}
+\end{figure*}
+
+
+
+% \figref{example} shows an example figure, referred to with the \verb=\figref= command and the \code{fig:} prefix.
 % \begin{figure}
 % \includegraphics[width=0.9\columnwidth]{example.png}
 % \caption{An example figure: the LSST DESC logo, copied from \code{texmf/logos/desc-logo.png} into \code{figures/example.png}. \label{fig:example}}
@@ -275,16 +374,62 @@ Each line must ``compile'' in the mind of the reader.
 \section{Conclusions}
 \label{sec:conclusions}
 
-Here's a summary of what we just reported.
+We have presented design guidelines for the wide and deep LSST SN
+surveys and discussed requirements on the survey depth and cadence.
+We have developed a lightweight metric to assess whether a given
+cadence matches these requirements without having to resort to an
+extensive simulation.
 
-We can draw the following well-organized and neatly-formatted conclusions:
+We have evaluated the \code{Minion\_1016} cadence, on a series of DDF
+and wide fields. We summarize our conclusions below:
+
 \begin{itemize}
-  \item This is important.
-  \item We can measure some number with some precision.
-  \item This has some implications.
+\item on the DDF fields, the survey is complete up to $z \sim
+  0.65$. This is comparable to what was obtained with SNLS in the
+  2000's but well below what should be an ambitious goal for LSST
+  (produce a redshift limited SN~Ia Hubble diagram up to $z_{lim} \sim
+  1$).
+
+\item on the DDF fields, increasing the duration of the search seasons
+  from 4.5 months to 6 months would allow to gain tremendously in
+  statistics (almost a factor 2) at high redshift.
+  
+\item on the Wide fields, the redshift limit is of about $z \sim
+  0.3$. A more ambitious target is rather $z_{lim} \sim 0.4$.  In the
+  $g$-band, the regularity of the cadence should be improved.
+
+\item we have shown that, by tweaking the cadence, one can reach a
+  $z_{lim}$ of 0.9 for the DDF fields and $z_{lim} \sim 0.4$ on the
+  Wide, in the same observing time budget.
+
+\item it remains to be proven that these cadences can be reached
+  within the constraints of the survey operations, as they are
+  implemented in {\tt OpSim}.  We suggest implementing, in the OpSim
+  scheduler, a dynamic scheduling algorithm based on the metrics
+  discussed above.  
+  
+  To give orders of magnitudes, a reasonable target is a cadence of 4
+  restframe days at the median redshift of the wide and deep surveys.
+  This corresponds to an observer frame cadence of $\sim 5.2$ (resp
+  6.8) days on the wide and the DDF respectively.
+
+\item finally, the results presented here should be taken with a bit
+  of caution.  As we discuss in appendix
+  \ref{sec:lsst_instrument_models}, and shown on figure
+  \ref{fig:lsst_model_summary}, the assessment of the instrument
+  throughput and of the average observing conditions have been
+  recently revised, and this revision has a very significant impact on
+  the expected survey depth (almost half a magnitude per standard
+  visit).  
+
+  Furthermore, the average observing conditions used in
+  \code{Minion\_{1016}} seem to be quite pessimistic.  In particular,
+  the \code{Minion\_{1016}} sky brightness is probably too bright,
+  especially in the $y$-band.
 \end{itemize}
 
-Here are some parting thoughts.
+The results presented in this note will be updated as revised OpSim
+cadences become available.
 
 
 % ----------------------------------------------------------------------
@@ -303,9 +448,13 @@ Here is where you should add your specific acknowledgments, remembering that som
 \bibliography{lsstdesc,main}
 
 
+
+
+
 \appendix
 
 \section{LSST instrument models}
+\label{sec:lsst_instrument_models}
 
 To prepare this study, we have used two instrument models.  One is
 based on the numbers reported in \cite[][LSE-40 hereafter]{LSE-40}.
@@ -416,11 +565,84 @@ snsim (Moffat, $\beta=7$)   &  23.61     &  24.83     &  24.35     &   23.88    
 \begin{center}
 \includegraphics[width=\linewidth]{lsst_model_summary.pdf}
 \caption{Zero-points, median seeing, dark sky mags and limiting mags}
+\label{fig:lsst_model_summary}
 \end{center}
 \end{figure}
+
+
+\section{Additional figures}
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{metric_DD_744.pdf}
+    \caption{}
+  \end{center}
+\end{figure}
+
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{metric_DD_1427.pdf}
+    \caption{}
+  \end{center}
+\end{figure}
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{metric_DD_2412.pdf}
+    \caption{}
+  \end{center}
+\end{figure}
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{metric_DD_2786.pdf}
+    \caption{}
+  \end{center}
+\end{figure}
+
+
+
+\begin{figure*}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{metric_WFD_660.pdf}
+    \caption{}
+  \end{center}
+\end{figure*}
+
+\begin{figure*}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{metric_WFD_1088.pdf}
+    \caption{}
+  \end{center}
+\end{figure*}
+
 
 
 
 \end{document}
 % ======================================================================
 % 
+
+
+
+
+
+
+
+
+% There are a number of useful \LaTeX\xspace commands predefined in
+% \code{macros.tex}.  Notice that the section labels are prefixed with
+% \code{sec:} to allow the use of the \verb=\secref= command to
+% reference a section (\ie, \secref{intro}).  Figures can be referenced
+% with the \verb=\figref= command, which assumes that the figure label
+% is prefixed with \code{fig:}.  In \figref{example} we show an example
+% figure.  You'll notice that the actual figure file is found in the
+% \code{figures} directory.  However, because we have specified this
+% directory in our \verb=\graphicspath= we do not need to explicitly
+% specify the path to the image.
+
+% The \code{macros.tex} package also contains some conventional
+% scientific units like \angstrom, \GeV, \Msun, etc. and some editorial
+% tools for highlighting \FIXME{issues}, \CHECK{text to be checked},
+% \COMMENT{comments}, and \NEW{new additions}.
