@@ -20,6 +20,10 @@
 \bibliographystyle{apj}
 \usepackage{subfigure}
 
+\usepackage{draftwatermark}
+\SetWatermarkScale{1}
+\SetWatermarkLightness{0.90}
+
 % Add your own macros here:
 
 
@@ -35,8 +39,41 @@
 
 \begin{abstract}
 
-Design notes, metrics and forecasts for the deep and wide LSST SN surveys.
+  % We discuss key design elements that must be taken into account to
+  % maximize the impact of the LSST deep and wide SN surveys. We show
+  % that they can be compressed into simple requirements on the quality
+  % of the SN light curves.
+  
+  We describe a simple metric that allows to evaluate the quality of
+  the SN~Ia light curves that will be delivered by the LSST Wide and
+  DDF surveys.  Evaluating this metric does not require to generate
+  and fit SN lightcurves.  It can therefore be used to evaluate
+  efficiently years of survey operations. It simple enough to be
+  included in the survey operation scheduler.
+  
+  Using this approach, we evaluate a small subset of the \code{OpSim}
+  \code{Minion\_1016} cadence. We find that the cadence and depth
+  described in \code{Minion\_1016} do not allow to build a redshift
+  limited survey up to $z \sim 1$.
 
+  The results presented in this work depend heavily on our knowledge
+  of (1) the throughput of the LSST telescope and camera system and
+  (2) the median observing conditions at Cerro Pachon (sky brightness
+  and seeing).  We compare the two documented LSST instrument models
+  (LSE-40 and SMTN-002) with \code{Minion\_1016}.
+
+  % We show that these values have been revised very
+  % significantly over the last few months, and we show how the depth of
+  % the average visit vary with the instrument model and observing
+  % conditions.
+
+  % In order to evaluate the cost, in observing time, of the LSST SN
+  % survey, it is essential to know whether the instrument model
+  % currently implemented in OpSim is a conservative assessement of
+  % what the survey will deliver.
+
+  The results presented in this note will be updated as new
+  \code{OpSim} realizations become available.
 \end{abstract}
 
 % Keywords are ignored in the LSST DESC Note style:
@@ -50,15 +87,45 @@ Design notes, metrics and forecasts for the deep and wide LSST SN surveys.
 \section{Introduction}
 \label{sec:intro}
 
-LSST has the capability to discover $O(10^5)$ SNe~Ia in the redshift
-range $0.03 < z < 0.4$ (wide survey) and $0.3 < z < 1.1$ (DDF
-survey). The question of how many of these events will have light
-curves of sufficient quality to be included in a Hubble diagram
-remains open.  It is essentially a function of the cadence and depth
-that will be delivered by the Wide and DDF surveys.
+With an adapted rolling cadence, LSST has the capability to discover
+and follow-up several $10^4$ SNe~Ia in the redshift range $0.1 < z <
+1$ (wide and DDF surveys combined) and to build a redshift-limited
+sample up to $z \sim 1$. At high redshift, this Hubble diagram will be
+competitive with the DESI constraints. At $z < 0.4$, LSST will have no
+competitor.
+
+Today's SN~Ia Hubble diagrams are systematics dominated, and
+provisions and plans must be made to push down as much as possible the
+level of the (known) sources of errors. Photometric calibration is
+today the dominant contribution to the systematic error budget.  There
+is ongoing work in the Project and in DESC to lower its contribution
+by a factor $\sim 5$ w.r.t.  today's standards.
+
+The Malmquist bias is next: it hits at the faint end of the wide and
+DDF surveys ($z \sim 0.4$ and $z \sim 0.9$ resp.) where one has to
+model the fraction of events lost. This modeling adds uncertainties
+which significantly reduce the weight of the most distant redshift
+bins.  This limits the actual depth and therefore the cosmological
+impact of the survey. Fortunately, the Malmquist bias can be entirely
+removed at the survey design stage. The key is to select a cadence
+that allows one to build a {\em redshit limited sample}, up to a
+certain redshift limit, $z_{lim}$.
 
 In this note, we examine the cadence envisioned for the 10 years of
-LSST operations.  We base ourselves
+LSST operations.  In \S\ref{sec:design_notes} we discuss the key
+requirements that drive the design of a SN survey.  We then
+(\S\ref{sec:metric}) present a very simple metric that will allow us
+to evaluate effectively a survey cadence without having to rely on
+extensive simulations.  In the two next sections
+(\S\ref{sec:ddf_cadence} and \S\ref{sec:wide_cadence}), we apply this
+metric to the \code{OpSim} DDF and wide cadence respectiveley. We
+conclude in \ref{sec:conclusions}.
+
+
+
+We base ourselves on the \code{Minion\_1016} run of \code{OpSim}. The
+results presented here will be updated as new \code{OpSim} runs become
+available.
 
 
 
@@ -89,12 +156,12 @@ losing a fraction of the sample, because the follow-up is not good
 enough (1) to measure a distance and (2) to perform a photometric
 identification.  Beyond this redshift limit, one has to estimate the
 fraction of events lost. This procedure yields uncertainties, that are
-quite intricated with (1) the control of the demographic evolution of
-SNe~Ia (2) the standardization procedures (see impact on $\beta$).  As
-a consequence, the supernovae beyond $z_{lim}$ are of limited
-usefulness.  Rather, we need to define, for each of our two surveys
-(DDF and wide) a nominal $z_{lim}$, and aim at building a sample that
-is complete up to $z_{lim}$. 
+quite intricated with (1) the control of the demographic evolution and
+the intrinsic properties of SNe~Ia (2) the standardization procedures
+(see impact on $\beta$).  As a consequence, the supernovae beyond
+$z_{lim}$ are of limited usefulness.  Rather, we need to define, for
+each of our two surveys (DDF and wide) a nominal $z_{lim}$, and aim at
+building a sample that is complete up to $z_{lim}$.
 
 By ``complete'', we mean that, each SN~Ia occurring:
 \begin{itemize}
@@ -171,7 +238,9 @@ $(X_1=-3, C=0.3)$ SNe~Ia around $z = z_{lim}$ pass these requirements.
 % ----------------------------------------------------------------------
 
 \section{A metric to evaluate a cadence}
-\label{sec:methods}
+\label{sec:metric}
+
+
 
 \subsection{The signal-to-noise on the light-curve amplitude}
 
@@ -245,13 +314,24 @@ and the SMTN-002 instrument model.
     $z$   &      $g$         &       $r$         &     $i$           &      $z$        &      $y$           \\
           &      \multicolumn{5}{c}{$[\mathrm{e^-/s \times \sqrt{day}}]$} \\
 \hline
-     0.4  &      86 &     267 &     279 &         &           \\
-     0.5  &      31 &     153 &     148 &         &           \\
-     0.6  &      12 &      81 &      94 &      92 &           \\
+     0.2  &     916 &    1330 &    1262 &     704 &     289   \\
+     0.3  &     284 &     513 &     495 &     421 &     149   \\
+     0.4  &      86 &     267 &     279 &     224 &      91   \\
+     0.5  &      31 &     153 &     148 &     131 &      76   \\
+     0.6  &      12 &      81 &      94 &      92 &      43   \\
      0.7  &         &      42 &      69 &      57 &      34   \\
      0.8  &         &      17 &      52 &      39 &      25   \\
      0.9  &         &      11 &      32 &      31 &      17   \\
+     1.0  &         &         &      20 &      26 &      12   \\
      1.1  &         &         &      11 &      20 &      11   \\
+
+     % 0.4  &      86 &     267 &     279 &         &           \\
+     % 0.5  &      31 &     153 &     148 &         &           \\
+     % 0.6  &      12 &      81 &      94 &      92 &           \\
+     % 0.7  &         &      42 &      69 &      57 &      34   \\
+     % 0.8  &         &      17 &      52 &      39 &      25   \\
+     % 0.9  &         &      11 &      32 &      31 &      17   \\
+     % 1.1  &         &         &      11 &      20 &      11   \\
 \hline
 \end{tabular}
 \end{center}
@@ -261,7 +341,7 @@ and the SMTN-002 instrument model.
 
 % ----------------------------------------------------------------------
 \section{The DEEP LSST SN survey}
-
+\label{sec:ddf_cadence}
 We now apply these two metrics 
 
 \subsection{The DDF cadence from \code{Minion\_1016}}
@@ -303,6 +383,8 @@ We now apply these two metrics
 
 % ----------------------------------------------------------------------
 \section{The Wide LSST SN survey}
+\label{sec:wide_cadence}
+
 \subsection{The cadence from \code{Minion\_1016}}
 \label{sec:results}
 

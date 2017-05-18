@@ -260,7 +260,7 @@ def f5_cadence_specs(SNR=20):
     
     # limit 
     print " LIMITS "
-    for z in [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1]:
+    for z in [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1]:
         mjd, shapes = get_pulse_shapes(z=z, X1=-3, Color=0.3, bands=bands)
         L = {}
         line = "  %6.1f  & " % z
