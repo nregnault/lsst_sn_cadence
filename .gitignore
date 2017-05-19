@@ -14,6 +14,8 @@
 *Notes.bib
 main.pdf
 main.tar.gz
+data/*.pdf
+data/*.png
 
 ### other files produced during compilation
 authors.tex
