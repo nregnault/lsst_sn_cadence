@@ -60,18 +60,13 @@
   of (1) the throughput of the LSST telescope and camera system and
   (2) the median observing conditions at Cerro Pachon (sky brightness
   and seeing).  We compare the two documented LSST instrument models
-  (LSE-40 and SMTN-002) with \code{Minion\_1016}.
-
-  % We show that these values have been revised very
-  % significantly over the last few months, and we show how the depth of
-  % the average visit vary with the instrument model and observing
-  % conditions.
-
-  % In order to evaluate the cost, in observing time, of the LSST SN
-  % survey, it is essential to know whether the instrument model
-  % currently implemented in OpSim is a conservative assessement of
-  % what the survey will deliver.
-
+  (\code{LSE-40} and \code{SMTN-002}) with \code{Minion\_1016}.  The
+  5-$\sigma$ depth obtained with \code{Minion\_1016} is about 0.8-mag
+  lower than what could be inferred a few years ago using the
+  \code{LSE-40} instrument model (and the median seeing and sky
+  brightnes values reported therein).  This has a very significant
+  impact on the effective depth of a LSST SN survey.
+  
   The results presented in this note will be updated as new
   \code{OpSim} realizations become available.
 \end{abstract}
@@ -87,29 +82,6 @@
 \section{Introduction}
 \label{sec:intro}
 
-With an adapted rolling cadence, LSST has the capability to discover
-and follow-up several $10^4$ SNe~Ia in the redshift range $0.1 < z <
-1$ (wide and DDF surveys combined) and to build a redshift-limited
-sample up to $z \sim 1$. At high redshift, this Hubble diagram will be
-competitive with the DESI constraints. At $z < 0.4$, LSST will have no
-competitor.
-
-Today's SN~Ia Hubble diagrams are systematics dominated, and
-provisions and plans must be made to push down as much as possible the
-level of the (known) sources of errors. Photometric calibration is
-today the dominant contribution to the systematic error budget.  There
-is ongoing work in the Project and in DESC to lower its contribution
-by a factor $\sim 5$ w.r.t.  today's standards.
-
-The Malmquist bias is next: it hits at the faint end of the wide and
-DDF surveys ($z \sim 0.4$ and $z \sim 0.9$ resp.) where one has to
-model the fraction of events lost. This modeling adds uncertainties
-which significantly reduce the weight of the most distant redshift
-bins.  This limits the actual depth and therefore the cosmological
-impact of the survey. Fortunately, the Malmquist bias can be entirely
-removed at the survey design stage. The key is to select a cadence
-that allows one to build a {\em redshit limited sample}, up to a
-certain redshift limit, $z_{lim}$.
 
 In this note, we examine the cadence envisioned for the 10 years of
 LSST operations.  In \S\ref{sec:design_notes} we discuss the key
@@ -121,70 +93,87 @@ extensive simulations.  In the two next sections
 metric to the \code{OpSim} DDF and wide cadence respectiveley. We
 conclude in \ref{sec:conclusions}.
 
-
-
-We base ourselves on the \code{Minion\_1016} run of \code{OpSim}. The
-results presented here will be updated as new \code{OpSim} runs become
-available.
+% We base ourselves on the \code{Minion\_1016} run of \code{OpSim}. The
+% results presented here will be updated as new \code{OpSim} runs become
+% available.
 
 
 
-% This is a paper and note template for the LSST DESC
-% \citep{Overview,ScienceBook,WhitePaper}.  You can delete all this
-% tutorial text whenever you like.
-
-% You can easily switch between various \LaTeX\xspace styles for
-% internal notes and peer reviewed journals.  Documents can be
-% compiled using the provided \code{Makefile}.  The command
-% \code{make} with no arguments compiles \code{main.tex} using the
-% \code{lsstdescnote.cls} style.  If you want to upgrade your Note
-% into a journal article, just choose a journal name, between
-% \code{make apj} (ApJ preprint format), \code{make apjl} (which uses
-% the \code{emulateapj} style), \code{make prd}, \code{make prl}, and
-% \code{make mnras}.
 
 
 % ----------------------------------------------------------------------
 
-\section{Design notes}
+\section{Design Elements}
 \label{sec:design_notes}
 
-\paragraph{Redshift-limited survey} A key design quantity is the
-redshift limit ($z_{lim}$) of the survey. Here, we do not refer to a
-detectability limit, but to the redshift value beyond which we start
-losing a fraction of the sample, because the follow-up is not good
-enough (1) to measure a distance and (2) to perform a photometric
-identification.  Beyond this redshift limit, one has to estimate the
-fraction of events lost. This procedure yields uncertainties, that are
-quite intricated with (1) the control of the demographic evolution and
-the intrinsic properties of SNe~Ia (2) the standardization procedures
-(see impact on $\beta$).  As a consequence, the supernovae beyond
-$z_{lim}$ are of limited usefulness.  Rather, we need to define, for
-each of our two surveys (DDF and wide) a nominal $z_{lim}$, and aim at
-building a sample that is complete up to $z_{lim}$.
+With an adapted rolling cadence, LSST has the capability to discover
+and follow-up  $10^4$ to $10^5$ SNe~Ia in the redshift range $0.1 < z <
+1$ (Wide and DDF surveys combined) and to build a redshift-limited
+sample up to $z \sim 1$. The distant part of this Hubble diagram will
+be competitive with the DESI constraints. At low redshifts ($z < 0.5$)
+LSST will have essentially no competitor.
 
-By ``complete'', we mean that, each SN~Ia occurring:
-\begin{itemize}
-\item in a well defined observer-frame time interval (that corresponds
-  to a season) $[T_{start}; T_{end}]$;
-\item in the redshift range $0.05 < z < z_{lim}$;
-\item in a region of the SN~Ia parameter space that is large enough to
+Today's SN~Ia Hubble diagrams are systematics dominated.  When
+designing a future high-statistics SN survey, provisions and plans
+must be made to push down as much as possible the level of the (known)
+sources of systematics. Photometric calibration is today the dominant
+contribution to the systematic error budget.  There is ongoing work in
+the Project and in DESC to lower its contribution by a factor $\sim 5$
+w.r.t.  today's standards.
+
+One important systematics that can be eliminated entirely at the
+survey design stage is the Malmquist bias.  It impacts the faint end
+of the wide and DDF surveys ($z \sim 0.4$ and $z \sim 0.9$ resp.)
+where one has to model the fraction of events lost.  This procedure
+yields uncertainties, that are quite intricated with (1) the control
+of the demographic evolution and the intrinsic properties of SNe~Ia
+(2) the standardization procedures (see impact on $\beta$).  As a
+consequence, the supernovae beyond $z_{lim}$ are of limited
+usefulness.  This limits the actual depth and therefore the
+cosmological impact of the survey. The key is therefore to select a
+cadence that allows one to build a {\em redshit limited sample}, up to
+a certain redshift limit, $z_{lim}$. A sound approach, is to set a
+redshift limit (this is a scientific decision, based on what we expect
+from the SN~Ia Hubble diagram in the global cosmology fit), and then
+to design the cadence that permit to build a complete sample up to
+that redshift limit.
+
+\paragraph{Redshift-limited sample} Note that this ``redshift-limit''
+is not a detectability limit. It is the redshift value beyond which
+we start losing a fraction of the events, because their photometric
+follow-up is not good enough to (1) measure a distance and (2) perform
+a photometric identification.
+
+% Rather, we need to define, for each of our two surveys (DDF and wide)
+% a nominal $z_{lim}$, and aim at building a sample that is complete up
+% to $z_{lim}$.
+
+A redshift limited sample is a sample such that every SN~Ia that occurs:
+(1) in a well defined observer-frame time interval (that corresponds
+  to a $\sim 180$ day search season) $\mathrm{[MJD_{start}; MJD_{end}]}$;
+(2) in the redshift range $z < z_{lim}$;
+(3) in a region of the SN~Ia parameter space that is large enough to
   encompass a potential evolution with redshift of the SN~Ia
   demographic properties;
-\end{itemize}
 has a follow-up which is ``good enough'' to (1) identify it
 photometrically as a SN~Ia and (2) derive a standardized distance from
 its lightcurve.
 
-\paragraph{Fiducial SN~Ia parameter space region} Up to a good
-approximation, SNe~Ia form a 2-dimensional family, that may be indexed
-for example with color and lightcurve-width (for example, the
-SALT2-color and the SALT2-$X_1$-parameter).  On figure
-\ref{fig:jla_X1_C}, we show the distribution of the JLA supernovae, in
-the $(X_1,C)$ parameter space. We note sizeable differences between the
-nearby and distant SNe, in particular in $X_1$.  However, the full JLA
-sample is well contained in the region $X_1 = [-3,3], Color= = [-0.3,
-0.3]$. 
+To define the parameter space region of interest, we propose to
+proceed as follows: up to a good approximation, SNe~Ia form a
+2-dimensional family, that may be indexed for example with color and
+lightcurve-width (for example, the SALT2-color and the
+SALT2-$X_1$-parameter).  On figure \ref{fig:jla_X1_C}, we show the
+distribution of the JLA supernovae, in the $(X_1,C)$ parameter
+space. We note sizeable differences between the nearby and distant
+SNe, in particular in $X_1$.  However, we see that the full JLA sample
+is comprised in the region $X_1 = [-3,3], Color= = [-0.3, 0.3]$.
+
+The much larger LSST samples will contain events that are outside that
+region of interest.  However, we can infer from JLA that the core of
+the distribution of SN~Ia is well contained in it -- at all redshifts
+below 1.
+
 
 \begin{figure}[t]
 \begin{center}
@@ -198,38 +187,68 @@ sample is well contained in the region $X_1 = [-3,3], Color= = [-0.3,
 On the same figure, we have marked in red the faintest SN in that
 parameter space ($X_1=-3, Color=0.3$). To be complete up to $z_{lim}$,
 the survey has to deliver a cadence that allows to derive a luminosity
-distance and a photometric identification for that event at a redshift
-$z_{lim}$.
+distance and a photometric identification for an event of such $X_1$
+and Color, at a redshift $z_{lim}$.
 
-\paragraph{Lightcurve quality requirements} Our lightcurve quality
-requirements are as follows:
-
-\begin{equation}
-  \mu = m^\star_B + \alpha X_1 - \beta C
-\end{equation}
+\paragraph{Lightcurve quality requirements} Light curve quality
+requirements have been discussed a few years ago, for the LSST-Euclid
+paper \citep{2014A&A...572A..80A}. We summarize them below:
 
 \begin{itemize}
-\item we need measurements in at least two bands, in order to
-  constrain the restframe color of the SN. Given the high intrinsic
-  dispersions of SNe~Ia in the restframe UV, these bands must sample
-  to the restframe region $3800 \angstrom < \lambda < 7000 \angstrom$.
-
+\item the follow-up of each supernova must be good enough in the
+  observer-frame bands that correspond to the $B$- and $V$-restframe
+  spectrum ($3800 \angstrom < \lambda < 7000 \angstrom$).  At
+  high-redshift, in particular, one should avoid relying on the $UV$
+  restframe region to derive a distance, given the high intrinsic
+  dispersion of SN~Ia at those wavelengths.
+  
 \item we require the light curve shape to be well sampled in the
   (restframe) phase interval $[-10;+30]$ days, with at least four
   visits before peak (each of those visits in any of the eligible
-  band), and ten visits after peak.
+  band), and ten visits after peak.  To obtain this in the lower
+  redshift region of the Hubble diagram, one requires an
+  observer-frame cadence of 4 days.  In the upper redshift region (DDF
+  fields), this requirement may be slightly relaxed. However, since we
+  are going to rely exclusively on photometric identification, it is
+  essential to secure a tight sampling of the SN color evolution at
+  all redshift.
   
-\item finally, we require that the photon noise contribution to the
-  distance measurement is subdominant w.r.t. the intrinsic dispersion
-  of the SNe (after standardization).  There are several ways to
-  quantify this.  The dominant contribution is carried by the color
-  (since $\beta \sim 3$). This means that requiring $\sigma C < 0.03$
-  ensures that $\sigma \mu < 0.1$, below the intrinsic dipersion in
-  the Hubble diagram, after standardization.
+\item we require that the photon noise contribution to the distance
+  measurement is subdominant w.r.t. the intrinsic dispersion of the
+  SNe (after standardization).  There are several ways to quantify
+  this.  With today's standardization techniques, the SN standardized
+  distance modulus is:
+  \begin{equation}
+    \mu = m^\star_B + \alpha X_1 - \beta C - \cal{M}
+  \end{equation}
+  where $m^\star_B$ is the peak brightness in restframe $B$, $X_1$
+  characterize the lightcurve width, and $C$ is an estimate of the
+  restframe color $B-V$. $\alpha$, $\beta$ and $\cal{M}$ are global
+  parameters, fit along with the cosmology. If the light curve is
+  correctly sampled (see point above), the propagation of the
+  measurement uncertainties affecting $m^\star_B$, $X_1$ and $C$ is
+  dominated by the contribution of $\sigma_C$. Indeed, if the light
+  curve is correctly sampled
+  
+
+  The dominant contribution is carried by the color (since
+  $\beta \sim 3$). This means that requiring $\sigma C < 0.03$ ensures
+  that $\sigma \mu < 0.1$, below the intrinsic dipersion in the Hubble
+  diagram, after standardization.
+
+
+\item each SN must have good quality measurements in at least three
+  bands. First, we need indeed to constrain the restframe color of the
+  SN, with two bands covering the restframe $B$ and $V$ region. Then,
+  we
+
+  
 
   Another way to look at this consists in placing requirements on the
   uncertainty of the amplitude of the lightcurve shape. 
 \end{itemize}
+
+
 
 Our goal is to make sure that the light curves of our faintest
 $(X_1=-3, C=0.3)$ SNe~Ia around $z = z_{lim}$ pass these requirements.
