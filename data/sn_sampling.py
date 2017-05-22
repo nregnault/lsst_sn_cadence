@@ -136,11 +136,17 @@ def generate_sample(obslog):
 
 def reso(lcfit, plot=1):
     r = []
-    for lc,W in lcfit:
-        C = np.linalg.inv(W)
+    #    for lc,W in lcfit:
+    #        C = np.linalg.inv(W)
+    #        r.append(np.sqrt(np.diag(C)))
+    #    r = np.rec.fromrecords(r, names=['eX0', 'eX1', 'eColor', 'eDayMax'])
+    #    return r
+    for lc in lcfit:
+        C = lc.covmat()
         r.append(np.sqrt(np.diag(C)))
     r = np.rec.fromrecords(r, names=['eX0', 'eX1', 'eColor', 'eDayMax'])
     return r
+
 
 
 def reso_vs_lc_amplitude():
@@ -202,8 +208,8 @@ def main_opsim_log(filename='Observations_DD_290_LSSTPG.txt', i_season=0,
     print len(idx), idx.sum()
     pl.plot(sne['z'][idx], res['eColor'][idx], marker='.', color='b', ls='')
     
-    pl.xlabel('$z$', fontsize=18)
-    pl.ylabel('$\sigma{\cal{C}}$', fontsize=18)
+    pl.xlabel('$z$', fontsize=20)
+    pl.ylabel('$\sigma_{\cal{C}}$', fontsize=20)
     pl.ylim((0., 0.15))
     pl.axhline(0.03, color='r', ls='--')
     if label:

@@ -44,17 +44,20 @@
   % that they can be compressed into simple requirements on the quality
   % of the SN light curves.
   
-  We describe a simple metric that allows to evaluate the quality of
+  We describe a simple metric that allows one to evaluate the quality of
   the SN~Ia light curves that will be delivered by the LSST Wide and
   DDF surveys.  Evaluating this metric does not require to generate
   and fit SN lightcurves.  It can therefore be used to evaluate
   efficiently years of survey operations. It simple enough to be
   included in the survey operation scheduler.
   
-  Using this approach, we evaluate a small subset of the \code{OpSim}
-  \code{Minion\_1016} cadence. We find that the cadence and depth
-  described in \code{Minion\_1016} do not allow to build a redshift
-  limited survey up to $z \sim 1$.
+  Using this approach, we evaluate a subset of the \code{OpSim}
+  \code{Minion\_1016} cadence.  For the DDF fields, we find that the
+  cadence and depth simulated in \code{Minion\_1016} do not allow to
+  build a redshift limited survey up to $z \sim 1$. For the main
+  survey, the depth of the 30-s visit satisfies the requirements,
+  expect in $z$.  We are currently evaluating the rolling cadence that
+  was suggested for the wide fields.
 
   The results presented in this work depend heavily on our knowledge
   of (1) the throughput of the LSST telescope and camera system and
@@ -62,10 +65,10 @@
   and seeing).  We compare the two documented LSST instrument models
   (\code{LSE-40} and \code{SMTN-002}) with \code{Minion\_1016}.  The
   5-$\sigma$ depth obtained with \code{Minion\_1016} is about 0.8-mag
-  lower than what could be inferred a few years ago using the
-  \code{LSE-40} instrument model (and the median seeing and sky
-  brightnes values reported therein).  This has a very significant
-  impact on the effective depth of a LSST SN survey.
+  lower than what can be inferred using the \code{LSE-40} instrument
+  model (and the median seeing and sky brightnes values reported in
+  the accompanying paper).  This impacts the effective depth of a LSST
+  SN survey, and increases significantly the cost of the LSST SN survey.
   
   The results presented in this note will be updated as new
   \code{OpSim} realizations become available.
@@ -78,7 +81,7 @@
 
 % ----------------------------------------------------------------------
 % 
-
+\newpage
 \section{Introduction}
 \label{sec:intro}
 
@@ -86,16 +89,12 @@
 In this note, we examine the cadence envisioned for the 10 years of
 LSST operations.  In \S\ref{sec:design_notes} we discuss the key
 requirements that drive the design of a SN survey.  We then
-(\S\ref{sec:metric}) present a very simple metric that will allow us
-to evaluate effectively a survey cadence without having to rely on
-extensive simulations.  In the two next sections
-(\S\ref{sec:ddf_cadence} and \S\ref{sec:wide_cadence}), we apply this
-metric to the \code{OpSim} DDF and wide cadence respectiveley. We
-conclude in \ref{sec:conclusions}.
-
-% We base ourselves on the \code{Minion\_1016} run of \code{OpSim}. The
-% results presented here will be updated as new \code{OpSim} runs become
-% available.
+(\S\ref{sec:metric}) present a metric that will allow us to evaluate
+efficiently a survey cadence without having to rely on extensive
+simulations.  In the next three sections (\S\ref{sec:ddf_cadence},
+\S\ref{sec:wide_cadence}, \S\ref{sec:rolling_cadence}), we apply
+this metric to the \code{OpSim} DDF, wide and rolling-wide cadences
+respectiveley. We conclude in \S\ref{sec:conclusions}.
 
 
 
@@ -113,40 +112,46 @@ sample up to $z \sim 1$. The distant part of this Hubble diagram will
 be competitive with the DESI constraints. At low redshifts ($z < 0.5$)
 LSST will have essentially no competitor.
 
-Today's SN~Ia Hubble diagrams are systematics dominated.  When
-designing a future high-statistics SN survey, provisions and plans
-must be made to push down as much as possible the level of the (known)
-sources of systematics. Photometric calibration is today the dominant
-contribution to the systematic error budget.  There is ongoing work in
-the Project and in DESC to lower its contribution by a factor $\sim 5$
-w.r.t.  today's standards.
+% Today's SN~Ia Hubble diagrams are systematics dominated.  When
+% designing a future high-statistics SN survey, provisions and plans
+% must be made to push down as much as possible the level of the (known)
+% sources of systematics. Photometric calibration is today the dominant
+% contribution to the systematic error budget.  There is ongoing work in
+% the Project and in DESC to lower its contribution by a factor $\sim 5$
+% w.r.t.  today's standards.
 
-One important systematics that can be eliminated entirely at the
-survey design stage is the Malmquist bias.  It impacts the faint end
-of the wide and DDF surveys ($z \sim 0.4$ and $z \sim 0.9$ resp.)
-where one has to model the fraction of events lost.  This procedure
-yields uncertainties, that are quite intricated with (1) the control
-of the demographic evolution and the intrinsic properties of SNe~Ia
-(2) the standardization procedures (see impact on $\beta$).  As a
-consequence, the supernovae beyond $z_{lim}$ are of limited
-usefulness.  This limits the actual depth and therefore the
-cosmological impact of the survey. The key is therefore to select a
-cadence that allows one to build a {\em redshit limited sample}, up to
-a certain redshift limit, $z_{lim}$. A sound approach, is to set a
-redshift limit (this is a scientific decision, based on what we expect
-from the SN~Ia Hubble diagram in the global cosmology fit), and then
-to design the cadence that permit to build a complete sample up to
-that redshift limit.
+The cosmological impact of a SN survey essentially depends on its
+redshift lever-arm, which itself depends almost exclusively on the
+redshift limit, $z_{lim}$, beyond which one starts to loose events
+because of poor sampling.
+%One important systematics that can be eliminated entirely at the
+%survey design stage is the Malmquist bias.  It impacts the faint end
+%of the wide and DDF surveys ($z \sim 0.4$ and $z \sim 0.9$ resp.)
+%where one has to model the fraction of events lost.  
+One can of course model the fraction of events lost, however, this
+procedure yields uncertainties, that are quite intricated with (1) the
+control of the demographic evolution and the intrinsic properties of
+SNe~Ia (2) the standardization procedures (see impact on $\beta$).  As
+a consequence, the supernovae beyond $z_{lim}$ are of limited
+usefulness.  $z_{lim}$ is therefore an essential characteristic of the
+survey design. Once we have chosen $z_{lim}$, we need to build the cadence 
+that delivers a complete sample up to that redshift limit. 
+
+
+% to select a
+% cadence that allows one to build a {\em redshit limited sample}, up to
+% a redshift limit, $z_{lim}$. 
+
+% A sound approach, is to set a redshift limit (this is a scientific
+% decision, based on what we expect from the SN~Ia Hubble diagram in
+% the global cosmology fit), and then to design the cadence that
+% permit to build a complete sample up to that redshift limit.
 
 \paragraph{Redshift-limited sample} Note that this ``redshift-limit''
 is not a detectability limit. It is the redshift value beyond which
 we start losing a fraction of the events, because their photometric
 follow-up is not good enough to (1) measure a distance and (2) perform
 a photometric identification.
-
-% Rather, we need to define, for each of our two surveys (DDF and wide)
-% a nominal $z_{lim}$, and aim at building a sample that is complete up
-% to $z_{lim}$.
 
 A redshift limited sample is a sample such that every SN~Ia that occurs:
 (1) in a well defined observer-frame time interval (that corresponds
@@ -265,7 +270,7 @@ The requirements above fall into two categories:
 
   An equivalent approach consists in placing requirements on the
   uncertainty of the amplitude of the light curve shape.  With three
-  bands, we each $\sigma_c < 0.03$ by requiring a SNR of 20 or better
+  bands, we reach $\sigma_c < 0.03$ by requiring a SNR of 20 or better
   on the light curve amplitude, in each band separately.  It is
   somewhat simpler to evaluate, as it does not require to perform a LC
   fit (or fisher matrix estimate) with a SN LC model.
@@ -307,6 +312,7 @@ where $L_i = A \times \ell_i$.  The weights can be expressed as a
 function of the 5-$\sigma$ limiting flux of each visit $i$, $f_{i|5}$:
 \begin{equation}
   SNR = 5 \times \left(\sum_i L^2_i f^{-2}_{i|5}\right)^{1/2}
+  \label{eqn:snr}
 \end{equation}
 This metrics is easy to compute, all it takes is a tabulated model of
 the light curve shape, and a cadence file, containing, for each visit,
@@ -489,23 +495,24 @@ at Cerro Pachon improves.
 \end{center}
 \end{figure*}
 
+\paragraph{Median depth and cadence needed to match the requirements}
 The constrains described in equation \ref{eqn:global_metric} can be
 represented graphically in the $m_{5\sigma}$-cadence plane. We do this
 on figure \ref{fig:m5_cadence_limits_ddf}, for the bands of interest
-for an intermediate and/or deep survey ($rizy$). 
+for an intermediate and/or deep survey ($rizy$).
 
 This plot allows one to quantify the nominal survey cadence and depth
 that are required to operate a survey up to a given redshift limit.
 As we target an observer-frame cadence ($^{-1}$) of 4 days, we need to
-reach depths of XX, XX, XX and XX per-visit, in the $griz$ bands,
-respectively. We may relax the cadence requirement, but this needs to
-be compensated by increasing the median visit depth.
+reach depths of 25.4, 24.7 and 24.7 per-visit, in the $i, z$ and $y$
+bands, respectively. We may relax the cadence requirement, but this
+needs to be compensated by increasing the median visit depth.
 
-We can show on the same graph the median cadence and depth derived for
-each DDF season taken from \code{Minion\_1016}. We have 5 DDF, each
-spanning 10 search seasons (over ten years). We compute the median
-cadence and depth of each season in each band. This gives 50
-cadence-depth assessments, which we represent with red crosses.
+\paragraph{Where we are now, with \code{Minion\_1016}} We can show on
+the same graph the median cadence and depth computed for each DDF
+field, from the \code{Minion\_1016} sequences. We have 5 DDF, each
+spanning 10 search seasons (ten years of operations).  This gives 50
+cadence-depth realizations, which we represent with red crosses.
 
 To match the cadence-depth requirements at a given redshift, we need
 to be {\em below} the corresponding line {\em in the $i$, $z$ and $y$
@@ -530,41 +537,104 @@ needed.
       seasons for that field. The light gray area corresponds to the
       margins for which the SN has no points before (resp after)
       peak.}
+    \label{fig:snr_metric}
   \end{center}
 \end{figure*}
 
 
+\paragraph{SN specific metric} The global metric above is very
+efficient to assess a nominal cadence and depth, and to evaluate a
+whole OpSim run. We also want to check the regularity of the cadence
+over a season. This can be done by computing, in each relevant band,
+the SNR that can be obtained on the amplitude of the lightcurve
+(following equation \ref{eqn:snr}), as a function of the SN peak date.
 
-Our (temporary) conclusion is that:
+This is what we show  on figure \ref{fig:snr_metric}, for our fiducial
+faint SN at a  redshift $z=1$, for one of the DDF  fields, and for the
+whole duration of  the survey operations. As we can  see, we are below
+our target SNR of  20 in all the relevant bands. We  also see that the
+cadence and depth  is not constant over one single  season. We suggest
+that adding  such a  metric in  the scheduler  would allow  to control
+finely the depth of the survey  over the whole duration of the season.
+The goal would  be to reach our target  SNR shortly\footnote{say, $-15
+  \times (1  + z_{lim})$ observer-frame  days} after the  beginning of
+the first observations of the season,  and to schedule the cadence and
+depth of the visits in such a  way that the SNR stays above the target
+SNR in all relevant bands during the season.
+
+
+\paragraph{What is the effective depth of the DDF survey ?}
+
+On figure \ref{fig:sigma_color_vs_z}, we show the SALT2 color
+uncertainty (shot noise only) as a function of the redshift of our
+$X_1=-3, C=0.3$ SN for the first season of field \#290 (the one of
+figure \ref{fig:snr_metric}).  We see that the redshift limit is
+$z_{lim} \sim 0.7$.  This is comparable to what SNLS was able to
+deliver, and probably far below what LSST can deliver. 
+
+\begin{figure}[t]
+\begin{center}
+\subfigure[season \#1]{\includegraphics[width=0.48\linewidth]{sigma_c_vs_z_DDF_290_0.pdf}}
+\subfigure[season \#3]{\includegraphics[width=0.48\linewidth]{sigma_c_vs_z_DDF_290_2.pdf}}
+\caption{Color uncertainty (shot noise only) as a function of redshift, for two seasons of DDF field \#290.}
+\label{fig:sigma_color_vs_z}
+\end{center}
+\end{figure}
+
+
+\paragraph{~} Our (temporary) conclusions for the DDF fields are that:
 \begin{itemize}
 \item in all bands, the cadence is about a factor 2 lower than our target.
+\item the season-to-season dispersion of the cadence is
+  significant. It could be reduced if one monitors the recent cadence
+  and depth within the scheduler, and tune the cadence and depth
+  accordingly.
 \item at the cadence delivered by \code{OpSim}, the $i$ and $z$ depth
   is 0.5-mag and 0.25-mag lower than our target (resp). In the
   $y$-band the depth is 1.75-mag below our target, but this is
-  probably due to the fact that the Minion sky is off.
+  probably due to the fact that the Minion sky level is incorrect in that band.
 \item in the $i$ and $z$ bands, increasing the cadence by a factor 2,
-  and keeping the per-visit depth similar allows to reach the
+  and keeping the per-visit depth similar allows one to reach the
   target. In the $y$ band, we do not know (yet) what to say, except
-  that we need to understand our sky model.
-\item the season-to-season dispersion is significant. It could be
-  reduced if one monitors the recent cadence and depth within the
-  scheduler, and tune the cadence and depth accordingly.
+  that we need to check the sky model.
 \item the cadence and depth vary quite significantly as a function of
   time, within a season. Again, computing on the fly the amplitude SNR
   for the [$X_1=-3, C=0.3$] SN at the targeted limiting redshift, and
   making sure that it stays above 20 in the $izy$ bands, would allow
-  to to stay above $z_{lim}$ for the whole duration of the season
+  to to stay above $z_{lim}$ for the whole duration of the search
   season.
 \end{itemize}
+
+
 
 % ----------------------------------------------------------------------
 \section{The Wide LSST SN survey}
 \label{sec:wide_cadence}
 
-\subsection{The cadence from \code{Minion\_1016}}
-\label{sec:results}
+We have produced the same plots the main (shallow, wide)
+survey. Figure \ref{fig:m5_cadence_limits_wide} shows the cadence {\em
+  vs.}  $m_{5\sigma}$ plane for the wide survey.  The red stars
+indicates the depth to attain, with a 4-day observer-frame cadence
+(22.9, 22.5, 22.3 in $r, i, $ and $z$ respectively).
 
-\begin{figure*}
+The red crosses indicate what we get from \code{Minion\_1016} for 3
+wide fields. If we target a survey complete up to $z_{lim} \sim 0.4$
+we find that:
+\begin{itemize}
+  \item in $r, i, $ and $z$ the cadence is too high ($\sim 10$ w.r.t 4 days observer frame)
+  \item in all bands, the cadence is extremely variable from field to
+    field (and from one year to another).
+  \item in $r$ and $i$, we go deep enough with the standard visits;
+  \item in $z$, we are not deep enough. It is likely that most $z$
+    band observations are taken with the moon up. For a SN survey targeting 
+    $z_{lim} = 0.4$, we need to either increase the exposure time in $z$, and 
+    observe also when the moon is down.    
+  \item in $g$, the cadence is extremely variable. This is ok for SNe
+    close to $z_{lim}$.  However, this reduces our ability to catch
+    nearby SNe.
+\end{itemize}
+
+\begin{figure*}[t]
 \begin{center}
 \subfigure[$g$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_wide_g.pdf}}
 \subfigure[$r$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_wide_r.pdf}}\\
@@ -586,45 +656,35 @@ Our (temporary) conclusion is that:
 \begin{figure*}[t]
   \begin{center}
     \includegraphics[width=\linewidth]{metric_WFD_309.pdf}
-    \caption{}
+    \caption{Colored lines: the SNR of the estimated amplitude of a
+      $[X_1=-3, C=0.3]$ SN~Ia at a redshift $z = 0.4$ as a function of
+      peak MJD, computed for the \code{Minion\_1016} cadence and depth
+      for field \#309. The SNR target is shown with the dashed red
+      line.  Thin gray lines: the cadence delivered in that band,
+      averaged in 30-day a sliding window.  The cadence target is
+      represented as a dotted line. The plot extends over the 10 years
+      of survey operations. The gray area corresponds to the search
+      seasons for that field. The light gray area corresponds to the
+      margins for which the SN has no points before (resp after)
+      peak.}
+    \label{fig:snr_metric_wide}
   \end{center}
 \end{figure*}
 
-
-
-% \figref{example} shows an example figure, referred to with the \verb=\figref= command and the \code{fig:} prefix.
-% \begin{figure}
-% \includegraphics[width=0.9\columnwidth]{example.png}
-% \caption{An example figure: the LSST DESC logo, copied from \code{texmf/logos/desc-logo.png} into \code{figures/example.png}. \label{fig:example}}
-% \end{figure}
-
-\subsection{The rolling cadence from \code{Minion\_1016}}
-\label{sec:results}
-
-% ----------------------------------------------------------------------
-
-\section{The Rolling Cadence }
-\label{sec:results}
-
-% \figref{example} shows an example figure, referred to with the \verb=\figref= command and the \code{fig:} prefix.
-
-% \begin{figure}
-% \includegraphics[width=0.9\columnwidth]{example.png}
-% \caption{An example figure: the LSST DESC logo, copied from \code{texmf/logos/desc-logo.png} into \code{figures/example.png}. \label{fig:example}}
-% \end{figure}
-
+On figure \ref{fig:snr_metric_wide}, we show again the SNR of our
+faint SN at $z_{lim} \sim 0.4$ as a function of SN peak MJD in bands
+$g, r, i$ and $z$. We see again that the depth in $z$ (and $g$) does
+not yet allow to stay above a SNR of 20 over the duration of each
+observing season.
 
 
 
 % ----------------------------------------------------------------------
 
-\section{Discussion}
-\label{sec:discussion}
+\section{Rolling Cadence on the wide survey}
+\label{sec:rolling_cadence}
 
-If you are planning on committing your paper to GitHub, it's a good idea to write your tex as one sentence per line.
-This allows for an easier \code{diff} of changes.
-It also makes sense to think of latex as \emph{code}, and sentences as logical statements, occupying one line each.
-Each line must ``compile'' in the mind of the reader.
+{\em [PG] to be written}
 
 
 % ----------------------------------------------------------------------
@@ -632,59 +692,81 @@ Each line must ``compile'' in the mind of the reader.
 \section{Conclusions}
 \label{sec:conclusions}
 
+We have presented lightweight metrics to assess whether a given
+cadence permits to build a redshift-limited sample up to a given
+redshift $z_{lim}$, without having to resort to an extensive
+simulation.
+
 We have presented design guidelines for the wide and deep LSST SN
 surveys and discussed requirements on the survey depth and cadence.
-We have developed a lightweight metric to assess whether a given
-cadence matches these requirements without having to resort to an
-extensive simulation.
 
 We have evaluated the \code{Minion\_1016} cadence, on a series of DDF
-and wide fields. We summarize our conclusions below:
+and wide fields. On the DDF fields, we have found that the current
+cadence yields a SN survey complete up to $z \sim 0.65$.  This is
+comparable to what was obtained with SNLS in the 2000's but well below
+what should be an ambitious goal for LSST (produce a redshift limited
+SN~Ia Hubble diagram up to $z_{lim} \sim 1$).
 
-\begin{itemize}
-\item on the DDF fields, the survey is complete up to $z \sim
-  0.65$. This is comparable to what was obtained with SNLS in the
-  2000's but well below what should be an ambitious goal for LSST
-  (produce a redshift limited SN~Ia Hubble diagram up to $z_{lim} \sim
-  1$).
+\FIXME{Conclusion on the main survey depends on what we obtain from
+  the wide rolling cadence.}
 
-\item on the DDF fields, increasing the duration of the search seasons
-  from 4.5 months to 6 months would allow to gain tremendously in
-  statistics (almost a factor 2) at high redshift.
+The results presented here should be taken with a bit of caution.  As
+we discuss in appendix \ref{sec:lsst_instrument_models}, and shown on
+figure \ref{fig:lsst_model_summary}, the assessment of the instrument
+throughput and of the average observing conditions have been recently
+revised, and this revision has a very significant impact on the
+expected survey depth (almost half a magnitude per standard visit).
+
+Furthermore, the average observing conditions used in
+\code{Minion\_{1016}} seem to be quite pessimistic.  In particular,
+the \code{Minion\_{1016}} sky brightness is probably too bright,
+especially in the $y$-band.
+
+
+% \begin{itemize}
+% \item on the DDF fields, the survey is complete up to $z \sim
+%   0.65$. This is comparable to what was obtained with SNLS in the
+%   2000's but well below what should be an ambitious goal for LSST
+%   (produce a redshift limited SN~Ia Hubble diagram up to $z_{lim} \sim
+%   1$).
+
+% \item on the DDF fields, increasing the duration of the search seasons
+%   from 4.5 months to 6 months would allow to gain tremendously in
+%   statistics (almost a factor 2) at high redshift.
   
-\item on the Wide fields, the redshift limit is of about $z \sim
-  0.3$. A more ambitious target is rather $z_{lim} \sim 0.4$.  In the
-  $g$-band, the regularity of the cadence should be improved.
+% \item on the Wide fields, the redshift limit is of about $z \sim
+%   0.3$. A more ambitious target is rather $z_{lim} \sim 0.4$.  In the
+%   $g$-band, the regularity of the cadence should be improved.
 
-\item we have shown that, by tweaking the cadence, one can reach a
-  $z_{lim}$ of 0.9 for the DDF fields and $z_{lim} \sim 0.4$ on the
-  Wide, in the same observing time budget.
+% \item we have shown that, by tweaking the cadence, one can reach a
+%   $z_{lim}$ of 0.9 for the DDF fields and $z_{lim} \sim 0.4$ on the
+%   Wide, in the same observing time budget.
 
-\item it remains to be proven that these cadences can be reached
-  within the constraints of the survey operations, as they are
-  implemented in {\tt OpSim}.  We suggest implementing, in the OpSim
-  scheduler, a dynamic scheduling algorithm based on the metrics
-  discussed above.  
+% \item it remains to be proven that these cadences can be reached
+%   within the constraints of the survey operations, as they are
+%   implemented in {\tt OpSim}.  We suggest implementing, in the OpSim
+%   scheduler, a dynamic scheduling algorithm based on the metrics
+%   discussed above.  
   
-  To give orders of magnitudes, a reasonable target is a cadence of 4
-  restframe days at the median redshift of the wide and deep surveys.
-  This corresponds to an observer frame cadence of $\sim 5.2$ (resp
-  6.8) days on the wide and the DDF respectively.
+%   To give orders of magnitudes, a reasonable target is a cadence of 4
+%   restframe days at the median redshift of the wide and deep surveys.
+%   This corresponds to an observer frame cadence of $\sim 5.2$ (resp
+%   6.8) days on the wide and the DDF respectively.
 
-\item finally, the results presented here should be taken with a bit
-  of caution.  As we discuss in appendix
-  \ref{sec:lsst_instrument_models}, and shown on figure
-  \ref{fig:lsst_model_summary}, the assessment of the instrument
-  throughput and of the average observing conditions have been
-  recently revised, and this revision has a very significant impact on
-  the expected survey depth (almost half a magnitude per standard
-  visit).  
+% \item finally, the results presented here should be taken with a bit
+%   of caution.  As we discuss in appendix
+%   \ref{sec:lsst_instrument_models}, and shown on figure
+%   \ref{fig:lsst_model_summary}, the assessment of the instrument
+%   throughput and of the average observing conditions have been
+%   recently revised, and this revision has a very significant impact on
+%   the expected survey depth (almost half a magnitude per standard
+%   visit).  
 
-  Furthermore, the average observing conditions used in
-  \code{Minion\_{1016}} seem to be quite pessimistic.  In particular,
-  the \code{Minion\_{1016}} sky brightness is probably too bright,
-  especially in the $y$-band.
-\end{itemize}
+%   Furthermore, the average observing conditions used in
+%   \code{Minion\_{1016}} seem to be quite pessimistic.  In particular,
+%   the \code{Minion\_{1016}} sky brightness is probably too bright,
+%   especially in the $y$-band.
+% \end{itemize}
 
 The results presented in this note will be updated as revised OpSim
 cadences become available.
@@ -694,13 +776,13 @@ cadences become available.
 
 \subsection*{Acknowledgments}
 
-Here is where you should add your specific acknowledgments, remembering that some standard thanks will be added via the \code{acknowledgments.tex} and \code{contributions.tex} files.
+% Here is where you should add your specific acknowledgments, remembering that some standard thanks will be added via the \code{acknowledgments.tex} and \code{contributions.tex} files.
 
-\input{acknowledgments}
+% \input{acknowledgments}
 
-\input{contributions}
+% \input{contributions}
 
-%{\it Facilities:} \facility{LSST}
+% {\it Facilities:} \facility{LSST}
 
 % Include both collaboration papers and external citations:
 \bibliography{lsstdesc,main}

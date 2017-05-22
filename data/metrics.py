@@ -548,7 +548,7 @@ def main():
     z_lim = 0.4
     fn = glob.glob('OpSimLogs/*_WFD_*.txt')
     for f in fn:
-        plot_lc_snr(filename=f, z=z_lim, X1=-3, Color=0.3, bands=['LSSTPG::' + b for b in "gri"])
+        plot_lc_snr(filename=f, z=z_lim, X1=-3, Color=0.3, bands=['LSSTPG::' + b for b in "griz"])
         fig = pl.gcf()
         num = re.search('Observations_WFD_(\d+).txt', f).group(1)
         fig.savefig('metric_WFD_' + num + '.png', bbox_inches='tight')
@@ -557,9 +557,9 @@ def main():
 
 def main_depth_ddf(instr_name='LSSTPG', 
                    bands=['r', 'i', 'z', 'y'], 
-                   target={'LSSTPG::i': (25.75, 8.),
-                           'LSSTPG::z': (25.06, 8.),
-                           'LSSTPG::y': (25.10, 8.) }):
+                   target={'LSSTPG::i': (25.37, 4.),
+                           'LSSTPG::z': (24.68, 4.),
+                           'LSSTPG::y': (24.72, 4.) }):
     
     instr = psf.find(instr_name)
     
@@ -582,9 +582,11 @@ def main_depth_ddf(instr_name='LSSTPG',
         
 def main_depth_wide(instr_name='LSSTPG', 
                     bands=['g', 'r', 'i', 'z'], 
-                    target={'LSSTPG::g': (24.4, 5.),
-                            'LSSTPG::r': (23.0, 5.),
-                            'LSSTPG::i': (22.6, 5.) }):
+                    target={'LSSTPG::g': (24.25, 4.),
+                            'LSSTPG::r': (22.85, 4.),
+                            'LSSTPG::i': (22.48, 4.),
+                            'LSSTPG::z': (22.33, 4.),
+                            }):
     
     instr = psf.find(instr_name)
     
