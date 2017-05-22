@@ -350,7 +350,7 @@ and the \code{SMTN-002} instrument model (see below).
 
 \begin{table}[t]
 \begin{center}
-\caption{cadence-depth limit for the worst case SN and a target SNR=20/band}
+\caption{cadence-depth limit for a $[X_1=-3, C=0.3]$ SN~Ia and a target SNR=20/band}
 \label{tab:cadence_depth_limit}
 \begin{tabular}{l|rrrrr}
 \hline
@@ -431,6 +431,14 @@ by DES.  In the $y$-band, the Minion prediction is strictly equal to
 see in the following of this note, this affects our ability to predict
 the effective depth of the DDF survey.
 
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=\linewidth]{lsst_model_summary.pdf}
+\caption{Zero-points, median seeing, dark sky mags and limiting mags}
+\label{fig:lsst_model_summary}
+\end{center}
+\end{figure}
+
 % We have compared all those values with the median seeing and sky
 % background computed from the \code{Minion\_1016} logs. Again, the
 % median seeing of Minion is considerably worse than that of
@@ -448,13 +456,6 @@ conditions. We note that the median depth predicted by \code{Minion}
 is 0.8 to 1 mag lower that what was inferred from LSE-40 in the
 \cite{2014A&A...572A..80A} study.
 
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=\linewidth]{lsst_model_summary.pdf}
-\caption{Zero-points, median seeing, dark sky mags and limiting mags}
-\label{fig:lsst_model_summary}
-\end{center}
-\end{figure}
 
 As a conclusion, the results presented below will need to be updated
 as our understanding of the instrument model and observing conditions
@@ -464,15 +465,12 @@ at Cerro Pachon improves.
 % ----------------------------------------------------------------------
 \section{The DEEP LSST SN survey}
 \label{sec:ddf_cadence}
-We now apply these two metrics 
 
 \subsection{The DDF cadence from \code{Minion\_1016}}
 \label{sec:results}
 
 
-
-
-\begin{figure*}
+\begin{figure*}[t]
 \begin{center}
 \subfigure[$r$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_r.pdf}}
 \subfigure[$i$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_i.pdf}}\\
@@ -491,17 +489,73 @@ We now apply these two metrics
 \end{center}
 \end{figure*}
 
+The constrains described in equation \ref{eqn:global_metric} can be
+represented graphically in the $m_{5\sigma}$-cadence plane. We do this
+on figure \ref{fig:m5_cadence_limits_ddf}, for the bands of interest
+for an intermediate and/or deep survey ($rizy$). 
+
+This plot allows one to quantify the nominal survey cadence and depth
+that are required to operate a survey up to a given redshift limit.
+As we target an observer-frame cadence ($^{-1}$) of 4 days, we need to
+reach depths of XX, XX, XX and XX per-visit, in the $griz$ bands,
+respectively. We may relax the cadence requirement, but this needs to
+be compensated by increasing the median visit depth.
+
+We can show on the same graph the median cadence and depth derived for
+each DDF season taken from \code{Minion\_1016}. We have 5 DDF, each
+spanning 10 search seasons (over ten years). We compute the median
+cadence and depth of each season in each band. This gives 50
+cadence-depth assessments, which we represent with red crosses.
+
+To match the cadence-depth requirements at a given redshift, we need
+to be {\em below} the corresponding line {\em in the $i$, $z$ and $y$
+  bands simultaneously}. We see that the average cadence delivered by
+the survey is about a factor 2 below our target. In the $i$ and $z$
+bands, the depth is adequate to obtain a survey complete up to $z \sim
+0.8$, however, the predicted $y$-band depth is far below what is
+needed.
 
 
 \begin{figure*}[t]
   \begin{center}
     \includegraphics[width=\linewidth]{metric_DD_290.pdf}
-    \caption{}
+    \caption{Colored lines: the SNR of the estimated amplitude of a
+      $[X_1=-3, C=0.3]$ SN~Ia at a redshift $z = 1$ as a function of
+      peak MJD, computed for the \code{Minion\_1016} cadence and depth
+      for field \#290. The SNR target is shown with the dashed red
+      line.  Thin gray lines: the cadence delivered in that band,
+      averaged in 30-day a sliding window.  The cadence target is
+      represented as a dotted line. The plot extends over the 10 years
+      of survey operations. The gray area corresponds to the search
+      seasons for that field. The light gray area corresponds to the
+      margins for which the SN has no points before (resp after)
+      peak.}
   \end{center}
 \end{figure*}
 
 
 
+Our (temporary) conclusion is that:
+\begin{itemize}
+\item in all bands, the cadence is about a factor 2 lower than our target.
+\item at the cadence delivered by \code{OpSim}, the $i$ and $z$ depth
+  is 0.5-mag and 0.25-mag lower than our target (resp). In the
+  $y$-band the depth is 1.75-mag below our target, but this is
+  probably due to the fact that the Minion sky is off.
+\item in the $i$ and $z$ bands, increasing the cadence by a factor 2,
+  and keeping the per-visit depth similar allows to reach the
+  target. In the $y$ band, we do not know (yet) what to say, except
+  that we need to understand our sky model.
+\item the season-to-season dispersion is significant. It could be
+  reduced if one monitors the recent cadence and depth within the
+  scheduler, and tune the cadence and depth accordingly.
+\item the cadence and depth vary quite significantly as a function of
+  time, within a season. Again, computing on the fly the amplitude SNR
+  for the [$X_1=-3, C=0.3$] SN at the targeted limiting redshift, and
+  making sure that it stays above 20 in the $izy$ bands, would allow
+  to to stay above $z_{lim}$ for the whole duration of the season
+  season.
+\end{itemize}
 
 % ----------------------------------------------------------------------
 \section{The Wide LSST SN survey}
