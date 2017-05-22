@@ -230,47 +230,71 @@ paper \citep{2014A&A...572A..80A}. We summarize them below:
   dominated by the contribution of $\sigma_C$. Indeed, if the light
   curve is correctly sampled
   
-
   The dominant contribution is carried by the color (since
   $\beta \sim 3$). This means that requiring $\sigma C < 0.03$ ensures
   that $\sigma \mu < 0.1$, below the intrinsic dipersion in the Hubble
   diagram, after standardization.
 
-
 \item each SN must have good quality measurements in at least three
-  bands. First, we need indeed to constrain the restframe color of the
-  SN, with two bands covering the restframe $B$ and $V$ region. Then,
-  we
-
-  
-
-  Another way to look at this consists in placing requirements on the
-  uncertainty of the amplitude of the lightcurve shape. 
+  bands. We need two bands, covering the restframe $B$ and $V$ region,
+  to constrain the restframe color of the SN. We need to provision an
+  additional band (redder than restframe $V$), to enable next
+  generation standardization techniques, that will likely rely on two
+  restframe colors.
 \end{itemize}
 
 
+\paragraph{Conclusion} As a conclusion, evaluating the cadence boils
+down to evaluating the follow-up of the faintest SN~Ia ($(X_1=-3,
+C=0.3)$) around $z = z_{lim}$. Our goal is to make sure that the light
+curves of this SN of such events pass these requirements, throughout
+the whole search season.
 
-Our goal is to make sure that the light curves of our faintest
-$(X_1=-3, C=0.3)$ SNe~Ia around $z = z_{lim}$ pass these requirements.
+The requirements above fall into two categories: 
+\begin{itemize}
+\item we have  cadence requirements, which are easy  to evaluate (just
+  count the number of visits before  and after peak in each band).  We
+  require  a  restframe  cadence  of  3  days  or  better.   Following
+  \cite{2014A&A...572A..80A}, we require an  observer frame cadence of
+  4 days.
+
+\item we also have depth requirements.  To quantify this, we can use
+  the SNR on the SALT2 color, evaluated from the fit of the light
+  curve of the faintest SN~Ia at different redshift and survey epochs:
+  we require $\sigma_C < 0.03$ for all such SNe.
+
+  An equivalent approach consists in placing requirements on the
+  uncertainty of the amplitude of the light curve shape.  With three
+  bands, we each $\sigma_c < 0.03$ by requiring a SNR of 20 or better
+  on the light curve amplitude, in each band separately.  It is
+  somewhat simpler to evaluate, as it does not require to perform a LC
+  fit (or fisher matrix estimate) with a SN LC model.
+\end{itemize}
+
+% Our goal is to make sure that the light curves of our faintest
+% $(X_1=-3, C=0.3)$ SNe~Ia around $z = z_{lim}$ pass these requirements.
 
 
 % ----------------------------------------------------------------------
 
+
+
 \section{A metric to evaluate a cadence}
 \label{sec:metric}
 
+We now show how our LC requirements above translate into a simple
+cadence-depth requirement.
 
 
 \subsection{The signal-to-noise on the light-curve amplitude}
-
-In this section, we present a metric 
 
 If we fit a model $A \times \ell(t)$ on a lightcurve $(t_i, y_i)$, the
 least square estimate of the amplitude is:
 \begin{equation}
   \hat{A} = \frac{\sum_i w_i \ell_i y_i}{\sum_i w_i \ell^2_i}
 \end{equation}
-where we note $\ell(t_i) = \ell_i$. The  variance of $\hat{A}$ is:
+where we note $\ell(t_i) = \ell_i$, and $w_i = 1 / \sigma_i^2$ the
+measurement weights. The variance of $\hat{A}$ is:
 \begin{equation}
   \mathrm{Var}(\hat{A}) = \left(\sum_i w_i \ell^2_i\right)^{-1}
 \end{equation}
@@ -279,8 +303,8 @@ and signal to noise we get on the amplitude $\hat{A} /
 \begin{equation}
   SNR = \left(\sum_i w_i L^2_i\right)^{1/2}
 \end{equation}
-where $L_i = A \times \ell_i$. Since we are dominated by the sky
-background, the
+where $L_i = A \times \ell_i$.  The weights can be expressed as a
+function of the 5-$\sigma$ limiting flux of each visit $i$, $f_{i|5}$:
 \begin{equation}
   SNR = 5 \times \left(\sum_i L^2_i f^{-2}_{i|5}\right)^{1/2}
 \end{equation}
@@ -291,18 +315,21 @@ an assessment of the $5\sigma$-depth reached during that visit.
 
 \subsection{Requirements on the survey cadence and depth}
 
-Using the metric above, we can give characterize the cadence and depth
-that allow to fulfill the requirements above. 
+Using the metric above, we can characterize the survey cadence and
+depth that allow to fulfill the requirements above.
 
 Let's define $\delta(t_i) = \delta_i$, which is equal to the number of
-observations in an interval $\Delta t$ around $t_i$. The metric above
-can be rewritten:
+observations in an interval $\Delta t$ around $t_i$ (we express
+$\delta_i$ in day$^{-1}$). The metric above can be rewritten:
 \begin{equation}
   SNR = 5 \times \left(\sum_i \delta_i L^2_i f^{-2}_{i|5} \Delta t\right)^{1/2}
 \end{equation}
 where the sum runs on all the $\Delta t$ bins, in a observer frame
-time interval covering the supernova lightcurve evolution. The requirement 
-above can be rewritten:
+time interval covering the supernova lightcurve evolution. 
+
+Let's define $f_{|5}$, the average 5-$\sigma$ limiting flux per visit,
+in the band under consideration. The requirement above can be
+rewritten:
 \begin{equation}
   f_{|5} \left<\delta_i\right>^{-1/2} \leq \frac{5 \sqrt{\Delta t} \sqrt{\sum_i L_i^2}}{SNR}
   \label{eqn:global_metric}
@@ -319,9 +346,7 @@ a supernova scientist is still needed, to compute the numerical values
 of the upper limits that appears in equation \ref{eqn:global_metric}
 For the records, we report these values in table
 \ref{tab:cadence_depth_limit}. They have been computed with SALT-2.4
-and the SMTN-002 instrument model.
-
-
+and the \code{SMTN-002} instrument model (see below).
 
 \begin{table}[t]
 \begin{center}
@@ -356,6 +381,84 @@ and the SMTN-002 instrument model.
 \end{center}
 \end{table}
 
+In the next sections, we show how the most recent \code{Minion\_1016}
+cadence compares to our cadence-depth requirements, using the metric
+above.  Before we do that, we must discuss the estimation of the
+5-$\sigma$ depth. 
+
+
+% ----------------------------------------------------------------------
+\section{Instruments models \& Observing conditions}
+\label{sec:instrument_model_summary}
+
+Several models of the LSST throughput have been pusblished.  The
+forecasts published in \cite{2014A&A...572A..80A} used the model
+described in \cite[][hereafter LSE-40]{LSE-40}. 
+
+\code{LSE-40} has been revised recently. The most recent model (as far
+as we know) is presented in \cite[][hereafter SMTN-002)]{SMTN-002}.
+The details and \code{LSE-40} and \code{SMTN-002} are discussed in
+appendix \ref{sec:lsst_instrument_models}.  In particular, the model
+characteristics are listed in tables \ref{tab:lse40} and
+\ref{tab:smtn002}, the model throughputs are compared on figure
+\ref{fig:throughput_comparison}.
+
+We note that the throughput of \code{SMTN-002} is almost 40\% lower
+than that of \code{LSE-40}.  While the latter model was probably a
+little optimistic, \code{SMTN-002} seems a bit pessimistic for an
+imager.  We have not been able to find, in the LSST literature, a
+discussion on the differences between \code{SMTN-002} and
+\code{LSE-40}.  Since the instrument throughput is an essential
+ingredient of the survey depth, it is important to understand whether
+\code{SMTN-002} was built as a realistic model, or as some kind of a
+worst case assessment (as of today, we do not know).
+
+On tables \ref{tab:lse40} and \ref{tab:smtn002} of appendix
+\ref{sec:lsst_instrument_models}, we have reported the observing
+conditions (median seeing and dark sky background) expected by in the
+\code{LSE-40} and \code{SMTN-002} references.  They differ
+significantly, \code{SMTN-002} being again more pessimistic than
+\code{LSE-40}.
+
+\code{Minion\_1016} uses \code{SMTN-002} (or a very similar instrument
+model), but predicts larger median seeing values.  The median sky
+obtained from the \code{Minion\_1016} logs is (expectedly) brigher
+than the dark sky levels of \code{LSE-40} and \code{SMTN-002}. In the
+$z$ band, the Minion sky levels are high, compared to what is measured
+by DES.  In the $y$-band, the Minion prediction is strictly equal to
+17.3 and shows no variation with the moon phase.  We believe that the
+\code{Minion\_1016} sky level is not valid in the $y$-band. As we will
+see in the following of this note, this affects our ability to predict
+the effective depth of the DDF survey.
+
+% We have compared all those values with the median seeing and sky
+% background computed from the \code{Minion\_1016} logs. Again, the
+% median seeing of Minion is considerably worse than that of
+% \code{SMTN-002}.  The median sky of Minion is also significantly
+% brighter (but here, we are comparing a median sky background with the
+% assessment of a dark sky background).
+
+On figure \ref{fig:lsst_model_summary}, we compare the throughtput
+(ZP), median seeing and sky of LSE-40, SMTN-002 and
+\code{Minion\_1016}.  On the lower left panel, we estimate the typical
+5-$\sigma$ depth of a 30-second LSST visit, from (1) the \code{LSE-40}
+and \code{SMTN-002} instrument model and observing conditions, and (2)
+the \code{SMTN-002} instrument model and Minion median observing
+conditions. We note that the median depth predicted by \code{Minion}
+is 0.8 to 1 mag lower that what was inferred from LSE-40 in the
+\cite{2014A&A...572A..80A} study.
+
+\begin{figure}[t]
+\begin{center}
+\includegraphics[width=\linewidth]{lsst_model_summary.pdf}
+\caption{Zero-points, median seeing, dark sky mags and limiting mags}
+\label{fig:lsst_model_summary}
+\end{center}
+\end{figure}
+
+As a conclusion, the results presented below will need to be updated
+as our understanding of the instrument model and observing conditions
+at Cerro Pachon improves.
 
 
 % ----------------------------------------------------------------------
@@ -557,9 +660,9 @@ Here is where you should add your specific acknowledgments, remembering that som
 \section{LSST instrument models}
 \label{sec:lsst_instrument_models}
 
-To prepare this study, we have used two instrument models.  One is
-based on the numbers reported in \cite[][LSE-40 hereafter]{LSE-40}.
-We report the main ingredients of this model in table \ref{tab:lse40}. 
+We  have used  two instrument  models.  One  is based  on the  numbers
+reported  in \cite[][LSE-40  hereafter]{LSE-40}.  We  report the  main
+ingredients of this model in table \ref{tab:lse40}.
 
 The other model is described in \cite[][hereafter
 SMTN-002)]{SMTN-002}, which constitutes a preliminary update of
@@ -658,17 +761,10 @@ snsim (Moffat, $\beta=7$)   &  23.61     &  24.83     &  24.35     &   23.88    
 \subfigure[LSE-40]{\includegraphics[width=0.45\linewidth]{lse_40_passbands.pdf}}
 \subfigure[SMTN-002]{\includegraphics[width=0.45\linewidth]{smtn002_passbands.pdf}}
 \caption{Instrument passbands}
+\label{fig:throughput_comparison}
 \end{center}
 \end{figure}
 
-
-\begin{figure}[t]
-\begin{center}
-\includegraphics[width=\linewidth]{lsst_model_summary.pdf}
-\caption{Zero-points, median seeing, dark sky mags and limiting mags}
-\label{fig:lsst_model_summary}
-\end{center}
-\end{figure}
 
 
 \section{Additional figures}
