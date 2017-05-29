@@ -255,13 +255,13 @@ def simple_cadence_metrics(eps, shape):
     return np.asarray(r)
     
 
-def f5_cadence_specs(SNR=20):
+def f5_cadence_specs(SNR=20, X1=-2, Color=0.25):
     bands=['LSSTPG::' + b for b in "grizy"]
     
     # limit 
     print " LIMITS "
     for z in [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1]:
-        mjd, shapes = get_pulse_shapes(z=z, X1=-3, Color=0.3, bands=bands)
+        mjd, shapes = get_pulse_shapes(z=z, X1=X1, Color=Color, bands=bands)
         L = {}
         line = "  %6.1f  & " % z
         for b in bands:
@@ -274,7 +274,7 @@ def f5_cadence_specs(SNR=20):
     # sum_i L_i^2 
     print " SUM Li2 "
     for z in [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1]:
-        mjd, shapes_worst_case = get_pulse_shapes(z=z, X1=-3, Color=0.3, bands=bands)
+        mjd, shapes_worst_case = get_pulse_shapes(z=z, X1=-2, Color=0.25, bands=bands)
         mjd, shapes_average    = get_pulse_shapes(z=z, X1=0., Color=0.0, bands=bands)
         L = {}
         line = "  %6.1f  & " % z
@@ -288,7 +288,7 @@ def f5_cadence_specs(SNR=20):
 
 def f5_cadence_lims(SNR=20, 
                     zs=[0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
-                    X1=-3., Color=0.3, 
+                    X1=-2., Color=0.25, 
                     bands=["LSSTPG::" + b for b in "grizy"]):
     """
     like the functin above, but just returns a dict 
@@ -534,12 +534,27 @@ def check_m5sigma_depth():
     pl.xlabel('$\Delta m_{5\sigma} [%s]$' % b)
     
 
+def texp_requirements():
+    d = NTuple.fromtxt('Observations_DD_290_LSSTPG.txt')
+    bands = ['LSSTPG::' + b for b in "rizy"]
+    #    seeing = np.asarray([np.median(d[d['band'] == 'LSSTPG::' + bn]['seeing']) for bn in bands])
+    #    sky = np.asarray([np.median(d[d['band'] == 'LSSTPG::' + bn]['sky']) for bn in bands])    
+    lsstpg = psf.ImagingInstrument('LSSTPG')
+    for bn in bands:
+        idx = lsstpg.data['band'] == bn
+        lsstpg.data['iq'][idx] = np.median(d[d['band'] == bn]['seeing'])
+        lsstpg.data['mag_sky'][idx] = np.median(d[d['band'] == bn]['sky'])
+        print bn, np.median(d[d['band'] == bn]['seeing']), np.median(d[d['band'] == bn]['sky'])
+    return lsstpg
+    
+        
+
 def main():
     
     z_lim=1.0
     fn = glob.glob('OpSimLogs/*_DD_*.txt')
     for f in fn:
-        plot_lc_snr(filename=f, z=z_lim, X1=-3, Color=0.3, bands=['LSSTPG::' + b for b in "izy"])
+        plot_lc_snr(filename=f, z=z_lim, X1=-2, Color=0.25, bands=['LSSTPG::' + b for b in "izy"])
         fig = pl.gcf()
         num = re.search('Observations_DD_(\d+).txt', f).group(1)
         fig.savefig('metric_DD_' + num + '.png', bbox_inches='tight')
@@ -548,7 +563,7 @@ def main():
     z_lim = 0.4
     fn = glob.glob('OpSimLogs/*_WFD_*.txt')
     for f in fn:
-        plot_lc_snr(filename=f, z=z_lim, X1=-3, Color=0.3, bands=['LSSTPG::' + b for b in "griz"])
+        plot_lc_snr(filename=f, z=z_lim, X1=-2, Color=0.25, bands=['LSSTPG::' + b for b in "griz"])
         fig = pl.gcf()
         num = re.search('Observations_WFD_(\d+).txt', f).group(1)
         fig.savefig('metric_WFD_' + num + '.png', bbox_inches='tight')
@@ -557,13 +572,14 @@ def main():
 
 def main_depth_ddf(instr_name='LSSTPG', 
                    bands=['r', 'i', 'z', 'y'], 
-                   target={'LSSTPG::i': (25.37, 4.),
-                           'LSSTPG::z': (24.68, 4.),
-                           'LSSTPG::y': (24.72, 4.) }):
+                   target={'LSSTPG::i': (26.25, 4.), # was 25.37
+                           'LSSTPG::z': (25.66, 4.), # was 24.68
+                           'LSSTPG::y': (25.68, 4.) }): # was 24.72
     
     instr = psf.find(instr_name)
     
     # DDF survey 
+    #    logs = [snsim.OpSimObsLog(NTuple.fromtxt(fn)) for fn in glob.glob('OpSimLogs_LSST/*_DD_*.txt')]
     logs = [snsim.OpSimObsLog(NTuple.fromtxt(fn)) for fn in glob.glob('OpSimLogs/*_DD_*.txt')]
     m = np.hstack([log.median_values() for log in logs])
     lims = f5_cadence_lims(zs=[0.6, 0.7, 0.8, 0.9, 1.0, 1.1], 
@@ -573,7 +589,7 @@ def main_depth_ddf(instr_name='LSSTPG',
         f5_cadence_plot(instr, instr_name + '::' + bn, 
                         lims, 
                         target=target,
-                        mag_range=(23., 26.), 
+                        mag_range=(23., 26.5), 
                         median_log_summary=m)
         pl.gcf().savefig('m5_cadence_limits_%s.png' % bn.split(':')[-1], 
                          bbox_inches='tight')
@@ -582,10 +598,10 @@ def main_depth_ddf(instr_name='LSSTPG',
         
 def main_depth_wide(instr_name='LSSTPG', 
                     bands=['g', 'r', 'i', 'z'], 
-                    target={'LSSTPG::g': (24.25, 4.),
-                            'LSSTPG::r': (22.85, 4.),
-                            'LSSTPG::i': (22.48, 4.),
-                            'LSSTPG::z': (22.33, 4.),
+                    target={'LSSTPG::g': (23.86, 4.), # 
+                            'LSSTPG::r': (23.82, 4.), # was 22.85
+                            'LSSTPG::i': (23.51, 4.), # was 22.48
+                            'LSSTPG::z': (23.4, 4.), # was 22.33
                             }):
     
     instr = psf.find(instr_name)

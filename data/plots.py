@@ -51,8 +51,8 @@ def figure1():
     pl.axhline(0.3, ls='--')
     pl.axhline(-0.3, ls='--')
     
-    pl.plot(-3., 0.3, marker='o', color='red', markersize=16)
-    pl.annotate('faintest SN', (-2.8, 0.31), xytext=(-2,0.35),
+    pl.plot(-2., 0.25, marker='o', color='red', markersize=16)
+    pl.annotate('faintest SN', (-2., 0.27), xytext=(-2,0.35),
                 arrowprops={'facecolor': 'r', 'shrink': 0.05})
     
     fig.savefig('sn_parameter_space.pdf', bbox_inches='tight')

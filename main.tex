@@ -507,9 +507,44 @@ for an intermediate and/or deep survey ($rizy$).
 This plot allows one to quantify the nominal survey cadence and depth
 that are required to operate a survey up to a given redshift limit.
 As we target an observer-frame cadence ($^{-1}$) of 4 days, we need to
-reach depths of 25.4, 24.7 and 24.7 per-visit, in the $i, z$ and $y$
+reach depths of 26.3, 25.7 and 25.7 per-visit, in the $i, z$ and $y$
 bands, respectively. We may relax the cadence requirement, but this
 needs to be compensated by increasing the median visit depth.
+
+We summarize in table \ref{tab:depth_for_ddf} the depth that needs to
+be reached, assuming a cadence of 4 observer-frame days. We also
+report the exposure times that are required to reach such a depth,
+assuming the median (Minion) observing conditions. 
+
+\begin{table*}[t]
+\begin{center}
+\begin{tabular}{l|cccc}
+\hline 
+\hline 
+                         & $r$ & $i$  & $z$  & $y$  \\
+\hline
+Target 5-$\sigma$ depth  & 25.8  & 26.3 & 25.7 & 25.6 \\
+Default $T_{exp}$ [s]      &  600   & 600  & 780  & 600  \\
+\hline
+seeing [median, Minion]  &  0.98 & 0.92  & 0.83 &  0.86 \\
+sky    [median, Minion]  & 20.9  & 19.9  & 19.1 &  17.3 \\
+$T_{exp}$ [s]             &        & 5000  & 5000 & $> 10000$ \\
+\hline
+seeing [LSE-40]          & 0.70  & 0.67  & 0.65  &  0.63 \\
+sky    [LSE-40]          & 21.2  & 20.5  & 19.6  & 18.6  \\
+$T_{exp}$ [s]             & $<600$  & 1000  & 1000  &  3600 \\
+\hline
+seeing [SMTN-002]        & 0.83 & 0.80 & 0.78 &  0.76   \\
+sky    [SMTN-002]        &  21.2 & 20.5  & 19.6 &  18.6 \\
+$T_{exp}$ [s]             &  $<600$ &  2400  & 2400    &  $> 10000$     \\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+
+
+
 
 \paragraph{Where we are now, with \code{Minion\_1016}} We can show on
 the same graph the median cadence and depth computed for each DDF
