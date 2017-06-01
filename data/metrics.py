@@ -143,7 +143,7 @@ def init_lcmodel(bands, filename='salt2.npz'):
 
 def get_pulse_shapes(bands, 
                      restframe_phase_range = (-20., 40.),
-                     z=1.1, X1=0., Color=0., DayMax=0., 
+                     z=1.1, X1=-2., Color=0.2, DayMax=0., 
                      filename='salt2.npz',
                      cosmo=cosmo, plot=False):
     """
@@ -254,8 +254,11 @@ def simple_cadence_metrics(eps, shape):
     return np.asarray(r)
     
 
-def f5_cadence_specs(SNR=20, X1=-2, Color=0.25):
-    bands=['LSSTPG::' + b for b in "grizy"]
+def f5_cadence_specs(SNR=dict(zip(['LSSTPG::' + b for b in "grizy"], 
+                                  [20., 20., 20., 20., 10.])), 
+                     X1=-2, Color=0.2):
+    #    bands=['LSSTPG::' + b for b in "grizy"]
+    bands = SNR.keys()
     
     # limit 
     print " LIMITS "
@@ -265,7 +268,7 @@ def f5_cadence_specs(SNR=20, X1=-2, Color=0.25):
         line = "  %6.1f  & " % z
         for b in bands:
             Li2 = np.sqrt(np.sum(shapes[b]**2))
-            lim = 5. * Li2 / SNR
+            lim = 5. * Li2 / SNR[b]
             line += " %6.0f & " % (lim,)
         line += '\\\\'
         print line 
@@ -273,7 +276,7 @@ def f5_cadence_specs(SNR=20, X1=-2, Color=0.25):
     # sum_i L_i^2 
     print " SUM Li2 "
     for z in [0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.1]:
-        mjd, shapes_worst_case = get_pulse_shapes(z=z, X1=-2, Color=0.25, bands=bands)
+        mjd, shapes_worst_case = get_pulse_shapes(z=z, X1=-2, Color=0.2, bands=bands)
         mjd, shapes_average    = get_pulse_shapes(z=z, X1=0., Color=0.0, bands=bands)
         L = {}
         line = "  %6.1f  & " % z
@@ -285,21 +288,23 @@ def f5_cadence_specs(SNR=20, X1=-2, Color=0.25):
         print line 
 
 
-def f5_cadence_lims(SNR=20, 
+def f5_cadence_lims(SNR=dict(zip(['LSSTPG::' + b for b in "rizy"], 
+                                 [25., 25., 25., 15.])),
                     zs=[0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1],
-                    X1=-2., Color=0.25, 
-                    bands=["LSSTPG::" + b for b in "grizy"]):
+                    X1=-2., Color=0.2):
+    #                    bands=["LSSTPG::" + b for b in "grizy"]):
     """
     like the functin above, but just returns a dict 
     with the cadence limits for the requested SNR
     """
+    bands = SNR.keys()
     lims = {}
     for z in zs:
         mjd, shapes = get_pulse_shapes(z=z, X1=X1, Color=Color, bands=bands)
         lims[z] = {}
         for b in bands:
             Li2 = np.sqrt(np.sum(shapes[b]**2))
-            lim = 5. * Li2 / SNR
+            lim = 5. * Li2 / SNR[b]
             lims[z][b] = lim
     return lims
 
@@ -327,8 +332,10 @@ def f5_cadence_lims(SNR=20,
 def f5_cadence_plot(lsstpg, band, lims=None, median_log_summary=None, 
                     mag_range=(23., 26.5), 
                     dt_range=(0.5, 15.), 
-                    target={},
-                    SNR=20):
+                    target={}):
+    #                    SNR=dict(zip(['LSSTPG::' + b for b in 'grizy'], 
+    #                                 [20., 20., 20., 20., 10.]))):
+    
     dt = np.linspace(dt_range[0], dt_range[1], 100)
     m5 = np.linspace(mag_range[0], mag_range[1], 100)
     b = [band] * len(m5)
@@ -551,7 +558,7 @@ def regular_cadence(instrument, z_max = 1.2, delta=4., log=None,
                     exptimes={# 'LSSTPG::r': 600., 
                               'LSSTPG::i': 600., 'LSSTPG::z': 600., 'LSSTPG::y': 600.}):
     
-    ph_min, ph_max = -15., 30.
+    ph_min, ph_max = -20., 40.
     mjd = np.arange(ph_min * (1.+z_max), ph_max*(1.+z_max)-delta, delta)
     N = len(mjd)
     
@@ -635,12 +642,12 @@ def plot_sigc_vs_z(instrument, reference_log=None, fig=None, delta=4., zmax=1.1,
     magres_mean = reso(lc_mean, bands=bands)
     
     sne_red = sne.copy()
-    sne_red['X1'] = -2. ; sne_red['Color'] = 0.25 ; sne_red['DayMax'] = 0.
+    sne_red['X1'] = -2. ; sne_red['Color'] = 0.2 ; sne_red['DayMax'] = 0.
     lc_red = s.generate_lightcurves(sne_red, lcmodel, fit=1)
     magres_red = reso(lc_red, bands=bands)
     
     sne_blue = sne.copy()
-    sne_blue['X1'] = 2. ; sne_blue['Color'] = -0.25 ; sne_blue['DayMax'] = 0.
+    sne_blue['X1'] = 2. ; sne_blue['Color'] = -0.2 ; sne_blue['DayMax'] = 0.
     lc_blue = s.generate_lightcurves(sne_blue, lcmodel, fit=1)
     magres_blue = reso(lc_blue, bands=bands)
     
@@ -673,10 +680,10 @@ def plot_sigc_vs_z(instrument, reference_log=None, fig=None, delta=4., zmax=1.1,
     pl.ylim((0., 100.))
     pl.legend(loc='best')
     pl.grid(1)
+    pl.xlim((0., zmax))
     if snr_filename is not None:
         pl.gcf().savefig(snr_filename + '.png', bbox_inches='tight')
         pl.gcf().savefig(snr_filename + '.pdf', bbox_inches='tight')
-    
     
     return fig, sne, magres_red, magres_mean, magres_blue, lc_red
 
@@ -686,39 +693,40 @@ def plot_figure_3():
     r = log.split()
     log = r[2]
     
+    # Wide 
     lsstpg = psf.find('LSSTPG')
-    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
+    r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
                        zmax=0.5, sigc_filename='sigc_lsstpg_wide_30', snr_filename='snr_lsstpg_wide_30')
-    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 60, 'LSSTPG::i': 60., 'LSSTPG::z': 30.}, 
+    r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 60, 'LSSTPG::i': 60., 'LSSTPG::z': 30.}, 
                        zmax=0.5, sigc_filename='sigc_lsstpg_wide_60', snr_filename='snr_lsstpg_wide_60')
-    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
+    r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
                        zmax=0.5, sigc_filename='sigc_lsstpg_wide_30_minion', snr_filename='snr_lsstpg_wide_30_minion', reference_log=log)
-    
+
+    # DDF 
     r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::r': 600, 'LSSTPG::i': 600., 'LSSTPG::z': 780., 'LSSTPG::y': 600}, 
                        zmax=1.1, sigc_filename='sigc_lsstpg_ddf_600', snr_filename='snr_lsstpg_ddf_600')
-    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::r': 1200, 'LSSTPG::i': 1200., 'LSSTPG::z': 1200., 'LSSTPG::y': 1200}, 
-                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1200', snr_filename='snr_lsstpg_ddf_1200')
-    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::r': 600, 'LSSTPG::i': 600., 'LSSTPG::z': 780., 'LSSTPG::y': 600}, 
-                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1200_minion', snr_filename='snr_lsstpg_ddf_1200_minion', reference_log=log)
-
+    r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::r': 1200, 'LSSTPG::i': 1800., 'LSSTPG::z': 1800., 'LSSTPG::y': 1800}, 
+                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1800_cad3', snr_filename='snr_lsstpg_ddf_1800_cad3')
     
-    r = plot_sigc_vs_z(lsstpg,  delta=2., exptimes={'LSSTPG::r': 1200, 'LSSTPG::i': 1200., 'LSSTPG::z': 1200., 'LSSTPG::y': 1200}, 
-                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1200_cad2', snr_filename='snr_lsstpg_ddf_1200_cad2')
+    #    r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::r': 600, 'LSSTPG::i': 600., 'LSSTPG::z': 780., 'LSSTPG::y': 600}, 
+    #                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1200_minion', snr_filename='snr_lsstpg_ddf_1200_minion', reference_log=log)    
+    #    r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::r': 1200, 'LSSTPG::i': 1200., 'LSSTPG::z': 1200., 'LSSTPG::y': 1200}, 
+    #                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1200_cad2', snr_filename='snr_lsstpg_ddf_1200_cad2')
     
     lsst = psf.find('LSST')
-    r = plot_sigc_vs_z(lsst,  delta=4., exptimes={'LSST::r': 1200, 'LSST::i': 1200., 'LSST::z': 1200., 'LSST::y4': 1200}, 
-                       zmax=1.1, sigc_filename='sigc_lsst_ddf_1200', snr_filename='snr_lsst_ddf_1200')
-    r = plot_sigc_vs_z(lsst,  delta=2., exptimes={'LSST::r': 1200, 'LSST::i': 1200., 'LSST::z': 1200., 'LSST::y4': 1200}, 
-                       zmax=1.1, sigc_filename='sigc_lsst_ddf_1200_cad2', snr_filename='snr_lsst_ddf_1200_cad2')
+    r = plot_sigc_vs_z(lsst,  delta=4., exptimes={'LSST::r': 600., 'LSST::i': 600., 'LSST::z': 780., 'LSST::y4': 600}, 
+                       zmax=1.1, sigc_filename='sigc_lsst_ddf_600', snr_filename='snr_lsst_ddf_600')
+    r = plot_sigc_vs_z(lsst,  delta=3., exptimes={'LSST::r': 1200, 'LSST::i': 1800., 'LSST::z': 1800., 'LSST::y4': 1800}, 
+                       zmax=1.1, sigc_filename='sigc_lsst_ddf_1800_cad3', snr_filename='snr_lsst_ddf_1800_cad3')
 
 
 
 def main():
     
-    z_lim=1.0
+    z_lim=0.8
     fn = glob.glob('OpSimLogs/*_DD_*.txt')
     for f in fn:
-        plot_lc_snr(filename=f, z=z_lim, X1=-2, Color=0.25, bands=['LSSTPG::' + b for b in "izy"])
+        plot_lc_snr(filename=f, z=z_lim, X1=-2, Color=0.2, bands=['LSSTPG::' + b for b in "izy"])
         fig = pl.gcf()
         num = re.search('Observations_DD_(\d+).txt', f).group(1)
         fig.savefig('metric_DD_' + num + '.png', bbox_inches='tight')
@@ -727,7 +735,7 @@ def main():
     z_lim = 0.4
     fn = glob.glob('OpSimLogs/*_WFD_*.txt')
     for f in fn:
-        plot_lc_snr(filename=f, z=z_lim, X1=-2, Color=0.25, bands=['LSSTPG::' + b for b in "griz"])
+        plot_lc_snr(filename=f, z=z_lim, X1=-2, Color=0.2, bands=['LSSTPG::' + b for b in "griz"])
         fig = pl.gcf()
         num = re.search('Observations_WFD_(\d+).txt', f).group(1)
         fig.savefig('metric_WFD_' + num + '.png', bbox_inches='tight')
@@ -735,22 +743,26 @@ def main():
 
 
 def main_depth_ddf(instr_name='LSSTPG', 
-                   bands=['r', 'i', 'z', 'y'], 
-                   target={'LSSTPG::i': (26.25, 4.), # was 25.37
-                           'LSSTPG::z': (25.66, 4.), # was 24.68
-                           'LSSTPG::y': (25.68, 4.) }): # was 24.72
+                   #                   bands=['r', 'i', 'z', 'y'], 
+                   SNR=dict(zip(['LSSTPG::' + b for b in "grizy"],
+                                [25., 25., 60., 35., 20.])),
+                   target={# 'LSSTPG::g': (26.91, 3.), # was 25.37
+                           'LSSTPG::r': (26.36, 3.), # was 25.37
+                           'LSSTPG::i': (26.09, 3.), # was 25.37      # could be 25.3 (400-s)
+                           'LSSTPG::z': (25.50, 3.), # was 24.68      # could be 25.1 (1000-s)
+                           'LSSTPG::y': (24.62, 3.) }): # was 24.72   
     
+    bands = SNR.keys()
     instr = psf.find(instr_name)
     
     # DDF survey 
     #    logs = [snsim.OpSimObsLog(NTuple.fromtxt(fn)) for fn in glob.glob('OpSimLogs_LSST/*_DD_*.txt')]
     logs = [snsim.OpSimObsLog(NTuple.fromtxt(fn)) for fn in glob.glob('OpSimLogs/*_DD_*.txt')]
     m = np.hstack([log.median_values() for log in logs])
-    lims = f5_cadence_lims(zs=[0.6, 0.7, 0.8, 0.9, 1.0, 1.1], 
-                           bands=[instr_name + '::' + b for b in bands])
+    lims = f5_cadence_lims(zs=[0.6, 0.7, 0.8, 0.9, 1.0, 1.1], SNR=SNR)
+    #                           bands=[instr_name + '::' + b for b in bands])
     for bn in bands:
-        print target 
-        f5_cadence_plot(instr, instr_name + '::' + bn, 
+        f5_cadence_plot(instr, bn, # instr_name + '::' + bn, 
                         lims, 
                         target=target,
                         mag_range=(23., 26.5), 
@@ -761,22 +773,25 @@ def main_depth_ddf(instr_name='LSSTPG',
                          bbox_inches='tight')
         
 def main_depth_wide(instr_name='LSSTPG', 
-                    bands=['g', 'r', 'i', 'z'], 
-                    target={'LSSTPG::g': (23.86, 4.), # 
-                            'LSSTPG::r': (23.82, 4.), # was 22.85
-                            'LSSTPG::i': (23.51, 4.), # was 22.48
-                            'LSSTPG::z': (23.4, 4.), # was 22.33
+                    #                    bands=['g', 'r', 'i', 'z'], 
+                   SNR=dict(zip(['LSSTPG::' + b for b in "griz"],
+                                [30., 40., 30., 20.])),
+                    target={'LSSTPG::g': (24.77, 3.), # 23.86
+                            'LSSTPG::r': (24.29, 3.), # 23.82
+                            'LSSTPG::i': (23.82, 3.), # 23.51
+                            'LSSTPG::z': (23.24, 3.),  # 
                             }):
     
     instr = psf.find(instr_name)
+    bands = SNR.keys()
     
     # Wide survey 
     logs = [snsim.OpSimObsLog(NTuple.fromtxt(fn)) for fn in glob.glob('OpSimLogs/*_WFD_*.txt')]
     m = np.hstack([log.median_values() for log in logs])
-    lims = f5_cadence_lims(zs=[0.1, 0.2, 0.3, 0.4, 0.5],
-                           bands=[instr_name + '::' + b for b in bands])
+    lims = f5_cadence_lims(zs=[0.1, 0.2, 0.3, 0.4, 0.5], SNR=SNR)
+    #                           bands=[instr_name + '::' + b for b in bands])
     for bn in bands:
-        f5_cadence_plot(instr, instr_name + '::' + bn, 
+        f5_cadence_plot(instr, bn, # instr_name + '::' + bn, 
                         lims, 
                         mag_range=(21., 24.8),
                         dt_range=(0.5, 30.),
