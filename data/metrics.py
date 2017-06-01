@@ -207,7 +207,6 @@ def plot_weighted_cadence(z=0.8, band='LSSTPG::z'):
 #    pl.plot(cadence, weighted_cadence, 'r.')
 
 
-
 def figure_1_pulse_shapes(X1=0., Color=0.):
     lsstpg = psf.ImagingInstrument('LSSTPG')
     colors = band_colors(lsstpg)
@@ -546,8 +545,173 @@ def texp_requirements():
         lsstpg.data['mag_sky'][idx] = np.median(d[d['band'] == bn]['sky'])
         print bn, np.median(d[d['band'] == bn]['seeing']), np.median(d[d['band'] == bn]['sky'])
     return lsstpg
-    
         
+
+def regular_cadence(instrument, z_max = 1.2, delta=4., log=None,
+                    exptimes={# 'LSSTPG::r': 600., 
+                              'LSSTPG::i': 600., 'LSSTPG::z': 600., 'LSSTPG::y': 600.}):
+    
+    ph_min, ph_max = -15., 30.
+    mjd = np.arange(ph_min * (1.+z_max), ph_max*(1.+z_max)-delta, delta)
+    N = len(mjd)
+    
+    # retrieve median seeing and sky values, either from the log 
+    # or from the instrument itself 
+    default_seeing, default_mag_sky = {}, {}
+    if log is not None:
+        for bn in exptimes.keys():
+            idx = log.band == bn
+            default_seeing[bn] = np.median(log.seeing[idx])
+            default_mag_sky[bn] = np.median(log.mag_sky[idx])
+    else:
+        for bn in exptimes.keys():
+            idx = instrument.data['band'] == bn
+            default_seeing[bn] = instrument.data['iq'][idx][0]
+            default_mag_sky[bn] = instrument.data['mag_sky'][idx][0]
+
+    for bn in exptimes.keys():
+        if default_seeing[bn] == np.nan or default_mag_sky[bn] == np.nan:
+            del seeing[bn]
+            del sky[bn]
+                            
+
+    bands, expt, seeing, sky, moon_frac, kAtm, airmass, m5sigmadepth, nexp = [], [], [], [], [], [], [], [], []
+    for bn in exptimes.keys():
+        if bn not in default_seeing or bn not in default_mag_sky:
+            continue
+        bands.extend([bn] * N)
+        expt.extend([exptimes[bn]] * N)        
+        seeing.extend([default_seeing[bn]] * N)
+        sky.extend([default_mag_sky[bn]] * N)
+        moon_frac.extend([0.] * N)
+        kAtm.extend([1.] * N)
+        airmass.extend([1.] * N)
+        nexp.extend([20] * N)
+        
+    flux_sky = instrument.mag_to_flux(sky, bands)    
+    m5sigmadepth = instrument.mag_lim(expt, flux_sky, seeing, bands)
+        
+    mjd = np.tile(mjd, len(exptimes))
+    return np.rec.fromarrays((bands, mjd, expt, seeing, moon_frac, sky, kAtm, airmass, m5sigmadepth, nexp), 
+                             names = ['band', 'mjd', 'exptime', 'seeing', 'moon_frac', 'sky', 'kAtm', 'airmass', 'm5sigmadepth', 'Nexp'])
+
+
+def reso(lcfit, bands=['LSSTPG::' + b for b in "grizy"]):
+    r = []
+    for lc in lcfit:
+        C = lc.covmat()
+        dd = np.sqrt(np.diag(C)).tolist()
+        for bn in bands:
+            dd.append(lc.amplitude_snr(bn))
+        r.append(dd)
+    
+    nm = [bn.split(':')[-1] + '_snr' for bn in bands]
+    r = np.rec.fromrecords(r, names=['eX0', 'eX1', 'eColor', 'eDayMax'] + nm)
+    return r
+
+
+def plot_sigc_vs_z(instrument, reference_log=None, fig=None, delta=4., zmax=1.1,
+                   sigc_filename=None, snr_filename=None,
+                   exptimes={'LSSTPG::r': 600., 
+                             'LSSTPG::i': 600., 'LSSTPG::z': 600., 'LSSTPG::y': 600.}):
+    
+    cad = regular_cadence(instrument, log=reference_log, 
+                          delta=delta,
+                          exptimes=exptimes)
+    bands = exptimes.keys()
+    
+    cad = snsim.OpSimObsLog(cad)
+    lcmodel = init_lcmodel(cad.band)
+    lcmodel.restframe_wavelength_range = (3600., 8000.)
+    s = snsim.SnSurveyMC(obslog=cad, filename='lsst_survey.conf')
+    s.survey_area = 20.
+    z = np.linspace(0.005, zmax, 100)
+    sne = s.generate_sample(z=z)
+    sne.sort(order='z')
+    
+    sne_mean = sne.copy()
+    sne_mean['X1'] = 0. ; sne_mean['Color'] = 0. ; sne_mean['DayMax'] = 0.
+    lc_mean = s.generate_lightcurves(sne_mean, lcmodel, fit=1)
+    magres_mean = reso(lc_mean, bands=bands)
+    
+    sne_red = sne.copy()
+    sne_red['X1'] = -2. ; sne_red['Color'] = 0.25 ; sne_red['DayMax'] = 0.
+    lc_red = s.generate_lightcurves(sne_red, lcmodel, fit=1)
+    magres_red = reso(lc_red, bands=bands)
+    
+    sne_blue = sne.copy()
+    sne_blue['X1'] = 2. ; sne_blue['Color'] = -0.25 ; sne_blue['DayMax'] = 0.
+    lc_blue = s.generate_lightcurves(sne_blue, lcmodel, fit=1)
+    magres_blue = reso(lc_blue, bands=bands)
+    
+    # plot with the 
+    if fig is None:
+        fig = pl.figure()
+    pl.fill_between(sne['z'], magres_red['eColor'], magres_blue['eColor'], color='blue', alpha=0.25)
+    pl.plot(sne['z'], magres_mean['eColor'], color='k', ls='-')
+    pl.plot(sne['z'], magres_blue['eColor'], color='b', ls='-', lw=1)
+    pl.plot(sne['z'], magres_red['eColor'], color='r', ls='-', lw=1)
+    pl.axhline(0.04, color='red', ls='--')
+    pl.xlabel('$z$', fontsize=18)
+    pl.ylabel('$\sigma_C$', fontsize=18)
+    pl.xlim((0., zmax))
+    pl.ylim((0., 0.15))
+    pl.grid(1)
+    if sigc_filename is not None:
+        pl.gcf().savefig(sigc_filename + '.png', bbox_inches='tight')
+        pl.gcf().savefig(sigc_filename + '.pdf', bbox_inches='tight')
+
+    
+    pl.figure()
+    colors = psf.band_colors(exptimes.keys())
+    for bn in exptimes.keys():
+        bb = bn.split(':')[-1]
+        idx = magres_red[bb + '_snr'] > 0.
+        pl.plot(sne_red['z'][idx], magres_red[bb + '_snr'][idx], color=colors[bn], marker='.', label=bb)
+    pl.xlabel('$z$', fontsize=18)
+    pl.ylabel('amplitude SNR', fontsize=18)
+    pl.ylim((0., 100.))
+    pl.legend(loc='best')
+    pl.grid(1)
+    if snr_filename is not None:
+        pl.gcf().savefig(snr_filename + '.png', bbox_inches='tight')
+        pl.gcf().savefig(snr_filename + '.pdf', bbox_inches='tight')
+    
+    
+    return fig, sne, magres_red, magres_mean, magres_blue, lc_red
+
+
+def plot_figure_3():
+    log = snsim.OpSimObsLog(NTuple.fromtxt('Observations_DD_290_LSSTPG.txt'))
+    r = log.split()
+    log = r[2]
+    
+    lsstpg = psf.find('LSSTPG')
+    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
+                       zmax=0.5, sigc_filename='sigc_lsstpg_wide_30', snr_filename='snr_lsstpg_wide_30')
+    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 60, 'LSSTPG::i': 60., 'LSSTPG::z': 30.}, 
+                       zmax=0.5, sigc_filename='sigc_lsstpg_wide_60', snr_filename='snr_lsstpg_wide_60')
+    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
+                       zmax=0.5, sigc_filename='sigc_lsstpg_wide_30_minion', snr_filename='snr_lsstpg_wide_30_minion', reference_log=log)
+    
+    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::r': 600, 'LSSTPG::i': 600., 'LSSTPG::z': 780., 'LSSTPG::y': 600}, 
+                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_600', snr_filename='snr_lsstpg_ddf_600')
+    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::r': 1200, 'LSSTPG::i': 1200., 'LSSTPG::z': 1200., 'LSSTPG::y': 1200}, 
+                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1200', snr_filename='snr_lsstpg_ddf_1200')
+    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::r': 600, 'LSSTPG::i': 600., 'LSSTPG::z': 780., 'LSSTPG::y': 600}, 
+                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1200_minion', snr_filename='snr_lsstpg_ddf_1200_minion', reference_log=log)
+
+    
+    r = plot_sigc_vs_z(lsstpg,  delta=2., exptimes={'LSSTPG::r': 1200, 'LSSTPG::i': 1200., 'LSSTPG::z': 1200., 'LSSTPG::y': 1200}, 
+                       zmax=1.1, sigc_filename='sigc_lsstpg_ddf_1200_cad2', snr_filename='snr_lsstpg_ddf_1200_cad2')
+    
+    lsst = psf.find('LSST')
+    r = plot_sigc_vs_z(lsst,  delta=4., exptimes={'LSST::r': 1200, 'LSST::i': 1200., 'LSST::z': 1200., 'LSST::y4': 1200}, 
+                       zmax=1.1, sigc_filename='sigc_lsst_ddf_1200', snr_filename='snr_lsst_ddf_1200')
+    r = plot_sigc_vs_z(lsst,  delta=2., exptimes={'LSST::r': 1200, 'LSST::i': 1200., 'LSST::z': 1200., 'LSST::y4': 1200}, 
+                       zmax=1.1, sigc_filename='sigc_lsst_ddf_1200_cad2', snr_filename='snr_lsst_ddf_1200_cad2')
+
+
 
 def main():
     
