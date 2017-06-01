@@ -28,6 +28,13 @@
 
 
 
+\newcommand{\fia}{fielda}
+\newcommand{\fib}{fieldb}
+\newcommand{\fic}{fieldc}
+\newcommand{\fiap}{fielda'}
+\newcommand{\fibp}{fieldb'}
+\newcommand{\ficp}{fieldc'}
+
 % 
 % ======================================================================
 
@@ -723,6 +730,85 @@ observing season.
 \label{sec:rolling_cadence}
 
 {\em [PG] to be written}
+
+The basic idea of the rolling cadence is to gather the ten-year
+observations of a WFD field into a smaller subset of seasons
+(typically three). Since it was not possible to simulate such a
+strategy with the OpSim version (v3.3.5) used to produce the \code{Minion\_1016}
+file, we have fake a rolling cadence by merging subsets of three WFD
+fields in a coherent way. The basic principle is the following. Let us
+consider three sets of observations corresponding to WFD fields,
+namely \fia, \fib, and \fic, and a merging factor m
+(0$\leq$m$\leq$1).  Observations corresponding to the rolling cadence
+will be denoted \fiap, \fibp, and \ficp. The first season is kept
+untouched. Observations related to the second season (and also to
+seasons 5 and 8) of \fiap~are composed
+of those of \fia~plus m fraction of observations of \fib~plus m fraction
+of observations of \fic. Observations of \fibp~and \ficp~are comprised of
+the remaining observations of \fib~and \fic. The same procedure is
+adopted for the following seasons, with the following permutation :
+\fia (\fiap) $\rightarrow$ \fib (\fibp) (season 3, 6 and 9) and \fib (\fibp)
+$\rightarrow$ \fic (\ficp) (season 4, 7, and 10). A summary of the combinations
+is given in  table \ref{tab:rolling_cadence}. We have made slices of
+the (ra,dec) area corresponding to the WFD survey to choose the fields
+to be merged. Each ra slice of two degrees was splitted in three dec
+regions. The three closest fields (one from each part) were considered for the
+merging. 
+
+\begin{table}[t]
+\begin{center}
+\caption{Procedure used to merge WFD fields to fake a rolling
+  cadence. The merging factor m was set to 0.8.}
+\label{tab:rolling_cadence}
+\begin{tabular}{c|l}
+\hline
+\hline
+    season   &      Observations \\
+\hline
+       & \fiap = \fia \\
+    1 & \fibp = \fib \\
+       & \fic = \fic \\
+\hline
+               & \fiap = \fia+m*\fib+m*\fic \\
+    2, 5, 8 & \fibp = (1-m)*\fib \\
+               & \ficp = (1-m)*\fic \\
+\hline
+               & \fiap = (1-m)*\fia \\
+    3, 6, 9 & \fibp = \fib +m*\fia+m*\fic\\
+              & \ficp = (1-m)*\fic \\
+\hline
+                 & \fiap = (1-m)*\fia\\
+    4, 7, 10 & \fibp = (1-m)*\fib \\
+                 & \ficp = \fic +m*\fia+m*\fib\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+The resulting observing strategy is given on figure
+\ref{fig:rolling_strategy}. We have tried to merge fields in a coherent way. In addition to
+elementary ajustments (such as the (ra,dec) values), we have performed
+a reshuffling of observations corresponding to \fiap (seasons 2, 5,
+and 8),\fibp (seasons 3, 6, and 9), and \ficp (seasons 4, 7, and
+10). For each season and each band, we aimed at distributing
+observations while keeping good observing conditions that is an
+airmass value between 1 and 1.5 (this upper limit was imposed by OpSim
+when producing the \code{Minion\_1016} cadence), a Moon phase lower
+than 60\% and a Moon zenith distance higher than 85$^°$. These last
+two conditions ensure that the brightness of the
+sky is acceptable. Observations at twilight were not retained.
+
+\begin{figure*}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{figures/Rolling_fields.pdf}
+    \caption{Observing strategy corresponding to the rolling
+      cadence. Blue, red and black crosses correspond to fields
+      observed during seasons (2,5,8), (3,6,9), and
+      (4,7,10), respectively.}
+    \label{fig:rolling_strategy}
+  \end{center}
+\end{figure*}
+
 
 
 % ----------------------------------------------------------------------
