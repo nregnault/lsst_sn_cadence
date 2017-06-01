@@ -478,9 +478,124 @@ as our understanding of the instrument model and observing conditions
 at Cerro Pachon improves.
 
 
+
+
 % ----------------------------------------------------------------------
-\section{The DEEP LSST SN survey}
+\section{The deep SN survey on the DDF fields}
 \label{sec:ddf_cadence}
+
+
+\subsection{Nominal cadence}
+
+Before we evaluate the \code{Minion\_1016} cadence, let's assess the
+quality of the SN follow-up if the survey delivers a nominal 4-day
+cadence. We adopt the sky brightness values and median seeing values
+that are reported in \cite{LSE-40} and \cite{SMTN-002} respectively.
+
+\begin{figure*}
+\begin{center}
+\subfigure[\code{SMTN-002} -- 600-s visits]{\includegraphics[width=0.49\linewidth]{sigc_lsstpg_ddf_600.pdf}}
+\subfigure[\code{SMTN-002} -- 1200-s DDF visits]{\includegraphics[width=0.49\linewidth]{sigc_lsstpg_ddf_1200.pdf}}
+\subfigure[\code{SMTN-002} -- 600-s visits]{\includegraphics[width=0.49\linewidth]{snr_lsstpg_ddf_600.pdf}}
+\subfigure[\code{SMTN-002} -- 1200-s DDF visits]{\includegraphics[width=0.49\linewidth]{snr_lsstpg_ddf_1200.pdf}}
+\end{center}
+\caption{Upper panels: $\sigma_C$ (shot noise only) obtained on the
+  DDF fields as a function of redshift.  On the left, for the standard
+  (r: 600-s, i: 600-s, z: 780-s, y: 600-s) visits and a 4 day cadence,
+  on the right for 1200-s visits (same cadence). Lower panels: SNR
+  obtained on the light curve amplitude, as a function of
+  redshift. Left and right: same observing conditions.}
+\label{fig:sigc_vs_z_4_day_cadence}
+\end{figure*}
+
+The quality of the distances is a function of the resolution we get on
+the SN color.  On figures \ref{fig:sigc_vs_z_4_day_cadence} and
+\ref{fig:sigc_vs_z_2_day_cadence} we display how $\sigma_C$ varies
+with redshift, for the mean SN (black curve), and our faint and bright
+fiducial SNe (red and blue curves respectively).  We present 4
+different scenarios:
+\begin{description}
+\item[Figure \ref{fig:sigc_vs_z_4_day_cadence}, left panels] standard
+  DDF visits (r: 600-s, i: 600-s, z: 780-s, y: 600-s); 4-day cadence;
+  instrument model and observing conditions taken from
+  \code{SMTN-002}.
+\item[Figure \ref{fig:sigc_vs_z_4_day_cadence}, right panels]
+  increasing the visits to 1200-s ($rizy$); 4-day cadence; instrument
+  model and observing conditions taken from \code{SMTN-002}.]
+\item[Figure \ref{fig:sigc_vs_z_2_day_cadence}, left panels] 1200-s in
+  ($rizy$), but with a 2-day cadence; instrument model and observing
+  conditions taken from \code{SMTN-002}.]
+\item[Figure \ref{fig:sigc_vs_z_2_day_cadence}, left panels] 1200-s in
+  ($rizy$); 2-day cadence; instrument model and observing conditions
+  taken from \code{LSE-40}.]
+\end{description}
+
+The sharp increase of $\sigma_C$ around $z \sim 0.7$ corresponds to
+when the $r$-band starts sampling the $\lambda < 3600\AA$ region. As
+discussed above, SNe are much more variable in the UV, hence we cannot
+rely on this spectral region to derive distances (until somebody
+figures out how to standardize SNe in the UV).
+
+The bottom panel shows the SNR on the amplitude of the lightcurves for
+our faint fiducial SN. We see that we are fine, as long as we can
+secure a SNR of 20 in each band buyt $y$. In $y$, obtaining this level
+of signal to noise seems to be very hard. Obtaining $SNR=10$ up to
+$z\sim 0.8$ does the job, as long as the two other bands reach a SNR of 20. 
+
+
+\begin{figure*}
+\begin{center}
+\subfigure[\code{SMTN-002} -- 1200-s -- 2 day cadence]{\includegraphics[width=0.49\linewidth]{sigc_lsstpg_ddf_1200_cad2.pdf}}
+\subfigure[\code{LSE-40} -- 1200-s -- 2 day cadence]{\includegraphics[width=0.49\linewidth]{sigc_lsst_ddf_1200_cad2.pdf}}
+\subfigure[\code{SMTN-002} -- 1200-s -- 2 day cadence]{\includegraphics[width=0.49\linewidth]{snr_lsstpg_ddf_1200_cad2.pdf}}
+\subfigure[\code{LSE-40} -- 1200-s -- 2 day cadence]{\includegraphics[width=0.49\linewidth]{snr_lsst_ddf_1200_cad2.pdf}}
+\end{center}
+\caption{Same as figure \ref{fig:sigc_vs_z_4_day_cadence} with a 2-day
+  cadence.  Left column: \code{SMTN-002}.  Right column:
+  \code{LSE-40}.  Doubling the cadence and the exposure time,
+  allows-one to build a sample that is complete up to $z \sim 0.75$ if
+  we assume that \code{SMTN-002} is a correct representation of the
+  instrument performances and 0.9 if we believe the official
+  \code{LSE-40} requirements.}
+\label{fig:sigc_vs_z_2_day_cadence}
+\end{figure*}
+
+These figures are a representative subset of what has been explored.
+We see that obtaining a good follow-up for the faint end of the SN
+distribution requires at least doubling the exposure time of each
+visit {\em and} the cadence. Doing so (and assuming \code{SMTN-002})
+allows one to build a sample that is almost complete up to $z \sim
+0.8$. In the following of this section, we will adopt this as our
+nominal scenario. Table \ref{tab:nominal_scenario_DDF} summarizes the
+cadence, exspoure times and the average $5-\sigma$ depth per visit.
+
+\begin{table*}
+\begin{center}
+\caption{A nominal scenario for the DDF that allows to build a SN
+  sample complete up to $z \sim 0.75$.}
+\label{tab:nominal_scenario_DDF}
+\begin{tabular}{l|cccc}
+\hline
+\hline
+              & $r$ & $i$ & $z$ & $y$ \\
+\hline 
+$T_{exp}$      & \multicolumn{4}{c}{1200-s} \\
+$m_{5\sigma}$  & 26.36    & 25.87    &  25.28    &  24.40   \\
+cadence       &  \multicolumn{4}{c}{2 days} \\
+Target amplitude SNR & $>20$ & $>20$ & $>20$ & $>10$ \\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+Finally, we note, from figure \ref{fig:sigc_vs_z_2_day_cadence} the
+impact of changing the instrument model on the effective depth of the
+survey: with the same time budget, we increase very sizeably the depth
+of the survey (from $z \sim 0.75$ to almost $z\sim 0.9$), with a
+significant increase of the quality of the average lightcurve.  We
+think it is essential for the SNWG members to understand the origin of
+the differences between \cite{LSE-40} and \cite{SMTN-002}.
+
 
 \subsection{The DDF cadence from \code{Minion\_1016}}
 \label{sec:results}
@@ -525,13 +640,17 @@ assuming the median (Minion) observing conditions.
 
 \begin{table*}[t]
 \begin{center}
+  \caption{Target 5-$\sigma$ depth for each visit of the Deep
+    SN-survey, assuming a 4 day cadence. Per-visit exposure times to
+    reach these depth. }
+\label{tab:depth_for_ddf}
 \begin{tabular}{l|cccc}
-\hline 
-\hline 
+\hline
+\hline
                          & $r$ & $i$  & $z$  & $y$  \\
 \hline
 Target 5-$\sigma$ depth  & 25.8  & 26.3 & 25.7 & 25.6 \\
-Default $T_{exp}$ [s]      &  600   & 600  & 780  & 600  \\
+Default $T_{exp}$ [s]     &  600   & 600  & 780  & 600  \\
 \hline
 seeing [median, Minion]  &  0.98 & 0.92  & 0.83 &  0.86 \\
 sky    [median, Minion]  & 20.9  & 19.9  & 19.1 &  17.3 \\
@@ -543,7 +662,7 @@ $T_{exp}$ [s]             & $<600$  & 1000  & 1000  &  3600 \\
 \hline
 seeing [SMTN-002]        & 0.83 & 0.80 & 0.78 &  0.76   \\
 sky    [SMTN-002]        &  21.2 & 20.5  & 19.6 &  18.6 \\
-$T_{exp}$ [s]             &  $<600$ &  2400  & 2400    &  $> 10000$     \\
+$T_{exp}$ [s]             &  $<600$ &  2400  & 2400  &  $> 10000$     \\
 \hline
 \end{tabular}
 \end{center}
@@ -655,6 +774,47 @@ deliver, and probably far below what LSST can deliver.
 % ----------------------------------------------------------------------
 \section{The Wide LSST SN survey}
 \label{sec:wide_cadence}
+
+\subsection{Nominal cadence}
+
+\begin{figure*}
+\begin{center}
+\subfigure[\code{SMTN-002} -- standard visits]{\includegraphics[width=0.49\linewidth]{sigc_lsstpg_wide_30.pdf}}
+\subfigure[\code{SMTN-002} -- deeper]{\includegraphics[width=0.49\linewidth]{sigc_lsstpg_wide_60.pdf}}
+\subfigure[\code{SMTN-002} -- standard visits]{\includegraphics[width=0.49\linewidth]{snr_lsstpg_wide_30.pdf}}
+\subfigure[\code{SMTN-002} -- deeper]{\includegraphics[width=0.49\linewidth]{snr_lsstpg_wide_60.pdf}}
+\end{center}
+\caption{Upper panels: $\sigma_C$ (shot noise only) obtained on the
+  standard fields as a function of redshift.  On the left, for the
+  standard 30-s visits and a 4 day cadence. On the right, we double
+  the exposure times in $r$ and $i$.  (same cadence).  Lower panels:
+  SNR obtained on the light curve amplitude, as a function of
+  redshift.}
+\label{fig:sigc_vs_z_4_day_cadence_wide}
+\end{figure*}
+
+
+\begin{table*}
+\begin{center}
+\caption{A nominal scenario for the wide that allows to build a SN
+  sample complete up to $z \sim 0.4$.}
+\label{tab:nominal_scenario_DDF}
+\begin{tabular}{l|cccc}
+\hline
+\hline
+              & $g$ & $r$ & $i$ & $z$ \\
+\hline 
+$T_{exp}$      & 30       &   60    &  60        & 30       \\
+$m_{5\sigma}$  &  24.77   &  24.29   &  23.82    &  23.24   \\
+cadence       &  \multicolumn{4}{c}{4 days} \\
+Target amplitude SNR & $>20$ & $>20$ & $>20$ & $>15$ \\
+\hline
+\end{tabular}
+\end{center}
+\end{table*}
+
+
+
 
 We have produced the same plots the main (shallow, wide)
 survey. Figure \ref{fig:m5_cadence_limits_wide} shows the cadence {\em
