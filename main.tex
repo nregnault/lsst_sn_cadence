@@ -614,8 +614,10 @@ the differences between \cite{LSE-40} and \cite{SMTN-002}.
   \ref{tab:cadence_depth_limit}. To fulfill the SNR requirements at a
   given redshift, one has to be {\em below} the corresponding
   line. The stars indicate an ambitious -- but attainable -- goal for
-  a DDF survey.  The red crosses show what the survey can currently
-  deliver according to \code{Minion\_1016}. }
+  a DDF survey.  The red and blue crosses show what the survey can currently
+  deliver according to \code{Minion\_1016}.  Red crosses correspond to
+  a the sky model implemented in \code{OpSim v3.3.5} and blue crosses to a
+  new sky model that will be implemented in the next versions of \code{OpSim}. }
 \label{fig:m5_cadence_limits_ddf}
 \end{center}
 \end{figure*}
@@ -676,7 +678,10 @@ $T_{exp}$ [s]             &  $<600$ &  2400  & 2400  &  $> 10000$     \\
 the same graph the median cadence and depth computed for each DDF
 field, from the \code{Minion\_1016} sequences. We have 5 DDF, each
 spanning 10 search seasons (ten years of operations).  This gives 50
-cadence-depth realizations, which we represent with red crosses.
+cadence-depth realizations, which we represent with red and blue
+crosses correspond to two sky models : the one implemented in
+\code{OpSim v3.3.5} \cite{1991PASP..103.1033K} and a new sky model that will be
+available for the next \code{OpSim} versions. 
 
 To match the cadence-depth requirements at a given redshift, we need
 to be {\em below} the corresponding line {\em in the $i$, $z$ and $y$
@@ -708,7 +713,7 @@ needed.
 
 \paragraph{SN specific metric} The global metric above is very
 efficient to assess a nominal cadence and depth, and to evaluate a
-whole OpSim run. We also want to check the regularity of the cadence
+whole \code{OpSim} run. We also want to check the regularity of the cadence
 over a season. This can be done by computing, in each relevant band,
 the SNR that can be obtained on the amplitude of the lightcurve
 (following equation \ref{eqn:snr}), as a function of the SN peak date.
@@ -822,8 +827,10 @@ survey. Figure \ref{fig:m5_cadence_limits_wide} shows the cadence {\em
 indicates the depth to attain, with a 4-day observer-frame cadence
 (22.9, 22.5, 22.3 in $r, i, $ and $z$ respectively).
 
-The red crosses indicate what we get from \code{Minion\_1016} for 3
-wide fields. If we target a survey complete up to $z_{lim} \sim 0.4$
+The red and blue crosses indicate what we get from \code{Minion\_1016}
+for all  wide fields. Red crosses correspond to the sky model implemented in
+\code{OpSim v3.3.5} \cite{1991PASP..103.1033K} and the blue crosses to
+a new sky model that will be available for the next \code{OpSim} versions.  If we target a survey complete up to $z_{lim} \sim 0.4$
 we find that:
 \begin{itemize}
   \item in $r, i, $ and $z$ the cadence is too high ($\sim 10$ w.r.t 4 days observer frame)
@@ -852,8 +859,10 @@ we find that:
   \ref{tab:cadence_depth_limit}. To fulfill the SNR requirements at a
   given redshift, one has to be {\em below} the corresponding
   line. The stars indicate an ambitious -- but attainable -- goal for
-  a DDF survey.  The red crosses show what the survey can currently
-  deliver according to \code{Minion\_1016}.}
+  a DDF survey.  The red and blue crosses show what the survey can currently
+  deliver according to \code{Minion\_1016}. Red crosses correspond to
+  a the sky model implemented in \code{OpSim v3.3.5} and blue crosses to a
+  new sky model that will be implemented in the next versions of OpSim.}
 \label{fig:m5_cadence_limits_wide}
 \end{center}
 \end{figure*}
@@ -889,13 +898,11 @@ observing season.
 \section{Rolling Cadence on the wide survey}
 \label{sec:rolling_cadence}
 
-{\em [PG] to be written}
-
 The basic idea of the rolling cadence is to gather the ten-year
 observations of a WFD field into a smaller subset of seasons
 (typically three). Since it was not possible to simulate such a
-strategy with the OpSim version (v3.3.5) used to produce the \code{Minion\_1016}
-file, we have fake a rolling cadence by merging subsets of three WFD
+strategy with the \code{OpSim} version (v3.3.5) used to produce the \code{Minion\_1016}
+file, we have faked a rolling cadence by merging subsets of three WFD
 fields in a coherent way. The basic principle is the following. Let us
 consider three sets of observations corresponding to WFD fields,
 namely \fia, \fib, and \fic, and a merging factor m
@@ -918,7 +925,8 @@ merging.
 \begin{table}[t]
 \begin{center}
 \caption{Procedure used to merge WFD fields to fake a rolling
-  cadence. The merging factor m was set to 0.8.}
+  cadence. Three fields are used here but one could extend the
+  procedure up to nine.The merging factor m was set to 0.8.}
 \label{tab:rolling_cadence}
 \begin{tabular}{c|l}
 \hline
@@ -951,12 +959,10 @@ elementary ajustments (such as the (ra,dec) values), we have performed
 a reshuffling of observations corresponding to \fiap (seasons 2, 5,
 and 8),\fibp (seasons 3, 6, and 9), and \ficp (seasons 4, 7, and
 10). For each season and each band, we aimed at distributing
-observations while keeping good observing conditions that is an
-airmass value between 1 and 1.5 (this upper limit was imposed by OpSim
-when producing the \code{Minion\_1016} cadence), a Moon phase lower
-than 60\% and a Moon zenith distance higher than 85$^°$. These last
-two conditions ensure that the brightness of the
-sky is acceptable. Observations at twilight were not retained.
+observations while keeping good observing conditions : airmass were
+requested to lie in the range [1,1.5] (this upper limit was imposed by \code{OpSim}
+when producing the \code{Minion\_1016} cadence), the Moon phase lower
+than 60\% and the Moon zenith distance higher than 85$^°$. Observations at twilight were not accepted.
 
 \begin{figure*}[t]
   \begin{center}
@@ -970,7 +976,136 @@ sky is acceptable. Observations at twilight were not retained.
 \end{figure*}
 
 
+The results of the procedure used to produce a rolling cadence are
+given on figures \ref{fig:rolling_airmass} and
+\ref{fig:rolling_cadence_filtre}. The frequency of observations is around 2.5 times higher
+in the Rolling survey, with mean cadences of 10.1, 7.3, 3.5, 3.5, 4.4,
+4.4 days for u, g, r, i, z and y bands,
+respectively (see table \ref{tab:cadence_bands}). A comparison of the
+median and mean values of the sky brightness (table
+\ref{tab:rolling_sky}) shows a compatibility of the results between
+the two strategies, except for the z-band. This may be explained by
+observing conditions which are less favourable for \code{Minion\_1016}
+in this band. 
 
+
+\begin{figure*}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{figures/Airmass_vs_mjd_511.pdf}
+    \caption{Airmass as a function of time for WFD field number
+      511. Blue points correspond to the \code{Minion\_1016}
+      observations and red stars to a rolling survey. Field number 511
+    is of type 'fielda'.}
+    \label{fig:rolling_airmass}
+  \end{center}
+\end{figure*}
+
+\begin{figure*}[t]
+\begin{center}
+\subfigure[$u$]{\includegraphics[width=0.48\linewidth]{Cadence_Hist_u.pdf}}
+\subfigure[$g$]{\includegraphics[width=0.48\linewidth]{Cadence_Hist_g.pdf}}
+\subfigure[$r$]{\includegraphics[width=0.48\linewidth]{Cadence_Hist_r.pdf}}
+\subfigure[$i$]{\includegraphics[width=0.48\linewidth]{Cadence_Hist_i.pdf}}
+\subfigure[$z$]{\includegraphics[width=0.48\linewidth]{Cadence_Hist_z.pdf}}
+\subfigure[$y$]{\includegraphics[width=0.48\linewidth]{Cadence_Hist_y.pdf}}
+
+\caption{Mean cadences for WFD fields of \code{Minion\_1016} (black)
+  and for the Rolling cadence (red). Only seasons corresponding to
+  higher number of observations (i.e seasons (2,5,8), (3,6,9) and
+  (4,7,10) for field types a, b, and c, respectively) have been considered.}
+\label{fig:rolling_cadence_filtre}
+\end{center}
+\end{figure*}
+
+
+\begin{table}[t]
+\begin{center}
+\caption{Mean cadences (in days)  for the WFD survey and the Rolling
+  Cadence. Only seasons corresponding to
+  higher number of observations (i.e seasons (2,5,8), (3,6,9) and
+  (4,7,10) for field types a, b, and c, respectively) have been considered. }
+\label{tab:cadence_bands}
+\begin{tabular}{c|c|c}
+\hline
+\hline
+   Band  & WFD   &      Rolling \\
+\hline
+     u   & 25.2 $\pm$ 5.8 & 10.1 $\pm$ 2.9\\
+     g   &  17.1 $\pm$ 4.8& 7.3 $\pm$ 1.9 \\
+     r   &8.4 $\pm$ 2.0 & 3.5 $\pm$ 1.0 \\
+     i   &8.4 $\pm$ 2.0  & 3.5 $\pm$ 1.0\\
+     z  & 11.5 $\pm$ 2.3 & 4.4 $\pm$ 0.9\\
+    y  & 11.8 $\pm$ 2.4& 4.4 $\pm$ 1.0\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{table}[t]
+\begin{center}
+\caption{Median and mean values of the sky brightness (in mag)  for the WFD survey and the Rolling
+  Cadence. Median values of seasons corresponding to
+  higher number of observations (i.e seasons (2,5,8), (3,6,9) and
+  (4,7,10) for field types a, b, and c, respectively) have been
+  considered for this estimation. }
+\label{tab:rolling_sky}
+\begin{tabular}{c|c|c|c|c}
+\hline
+\hline
+   Band  & \multicolumn{2}{|c}{WFD}  &      \multicolumn{2}{|c}{Rolling} \\
+            &     median & mean & median & mean \\
+\hline
+     u   &  22.0  & 22.05 $\pm$ 0.01  & 22.0  & 22.02 $\pm$ 0.01 \\
+     g   &  21.8  & 21.78$\pm$ 0.01  & 21.8  & 21.80 $\pm$ 0.02  \\
+     r   &   21.0  & 21.07 $\pm$ 0.01   & 21.1  & 21.16 $\pm$ 0.02  \\
+     i   &   19.9  & 19.8 $\pm$ 0.2   & 20.1  & 20.10 $\pm$ 0.02 \\
+     z  &   17.5  & 17.5 $\pm$ 0.1  & 19.3  & 19.30 $\pm$ 0.01 \\
+    y  &    17.3  & 17.3 $\pm$ nan & 17.3   & 17.3 $\pm$ nan \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+Figure \ref{fig:m5_cadence_limits_rolling} shows the cadence {\em
+  vs.}  $m_{5\sigma}$ plane for the wide survey.  The red stars
+indicates the depth to attain, with a 4-day observer-frame cadence
+(22.9, 22.5, 22.3 in $r, i, $ and $z$ respectively).
+
+
+The red crosses indicate what we get from \code{Minion\_1016} and the
+blue crosses correspond to the Rolling cadence. If we target a survey complete up to $z_{lim} \sim 0.4$
+we find that:
+\begin{itemize}
+  \item in $r, i, $ and $z$ the cadence is too high ($\sim 10$ w.r.t 4 days observer frame)
+  \item in all bands, the cadence is extremely variable from field to
+    field (and from one year to another).
+  \item in $r$ and $i$, we go deep enough with the standard visits;
+  \item in $z$, we are not deep enough. It is likely that most $z$
+    band observations are taken with the moon up. For a SN survey targeting 
+    $z_{lim} = 0.4$, we need to either increase the exposure time in $z$, and 
+    observe also when the moon is down.    
+  \item in $g$, the cadence is extremely variable. This is ok for SNe
+    close to $z_{lim}$.  However, this reduces our ability to catch
+    nearby SNe.
+\end{itemize}
+
+\begin{figure*}[t]
+\begin{center}
+\subfigure[$g$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_rolling_r.pdf}}
+\subfigure[$r$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_rolling_i.pdf}}\\
+\subfigure[$i$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_rolling_z.pdf}}
+\subfigure[$z$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_rolling_y.pdf}}
+\caption{The cadence {\em vs.} depth requirements for the Wide survey,
+  in the $r, i, z $ and $y$-bands. The color scale corresponds to the
+  metric described in equation \ref{eqn:global_metric}.  The lines are
+  the contour-levels computed for the limits indicated on table
+  \ref{tab:cadence_depth_limit}. To fulfill the SNR requirements at a
+  given redshift, one has to be {\em below} the corresponding
+  line. The stars indicate an ambitious -- but attainable -- goal for
+  a DDF survey.  The red and blue crosses show what the survey can currently
+  deliver according to \code{Minion\_1016} and the Rolling cadence, respectively.}
+\label{fig:m5_cadence_limits_rolling}
+\end{center}
+\end{figure*}
 % ----------------------------------------------------------------------
 
 \section{Conclusions}
@@ -1086,7 +1221,7 @@ ingredients of this model in table \ref{tab:lse40}.
 
 The other model is described in \cite[][hereafter
 SMTN-002)]{SMTN-002}, which constitutes a preliminary update of
-LSE-40.  The current version OpSim relies on SMTN-002. An we therefore
+LSE-40.  The current version \code{OpSim} relies on SMTN-002. An we therefore
 adopt this model as our reference. Key quantities of SMTN-002 are
 listed in table \ref{tab:smtn002}.
 
