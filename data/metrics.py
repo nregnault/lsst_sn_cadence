@@ -747,10 +747,10 @@ def main_depth_ddf(instr_name='LSSTPG',
                    SNR=dict(zip(['LSSTPG::' + b for b in "grizy"],
                                 [25., 25., 60., 35., 20.])),
                    target={# 'LSSTPG::g': (26.91, 3.), # was 25.37
-                           'LSSTPG::r': (26.36, 3.), # was 25.37
-                           'LSSTPG::i': (26.09, 3.), # was 25.37      # could be 25.3 (400-s)
-                           'LSSTPG::z': (25.50, 3.), # was 24.68      # could be 25.1 (1000-s)
-                           'LSSTPG::y': (24.62, 3.) }): # was 24.72   
+                           'LSSTPG::r': (26.43, 3.), # was 25.37
+                           'LSSTPG::i': (26.16, 3.), # was 25.37      # could be 25.3 (400-s)
+                           'LSSTPG::z': (25.56, 3.), # was 24.68      # could be 25.1 (1000-s)
+                           'LSSTPG::y': (24.68, 3.) }): # was 24.72   
     
     bands = SNR.keys()
     instr = psf.find(instr_name)
@@ -776,10 +776,10 @@ def main_depth_wide(instr_name='LSSTPG',
                     #                    bands=['g', 'r', 'i', 'z'], 
                    SNR=dict(zip(['LSSTPG::' + b for b in "griz"],
                                 [30., 40., 30., 20.])),
-                    target={'LSSTPG::g': (24.77, 3.), # 23.86
-                            'LSSTPG::r': (24.29, 3.), # 23.82
-                            'LSSTPG::i': (23.82, 3.), # 23.51
-                            'LSSTPG::z': (23.24, 3.),  # 
+                    target={'LSSTPG::g': (24.83, 3.), # 23.86
+                            'LSSTPG::r': (24.35, 3.), # 23.82
+                            'LSSTPG::i': (23.88, 3.), # 23.51
+                            'LSSTPG::z': (23.30, 3.),  # 
                             }):
     
     instr = psf.find(instr_name)
