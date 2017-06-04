@@ -695,11 +695,11 @@ def plot_figure_3():
     
     # Wide 
     lsstpg = psf.find('LSSTPG')
-    r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
+    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
                        zmax=0.5, sigc_filename='sigc_lsstpg_wide_30', snr_filename='snr_lsstpg_wide_30')
-    r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 60, 'LSSTPG::i': 60., 'LSSTPG::z': 30.}, 
-                       zmax=0.5, sigc_filename='sigc_lsstpg_wide_60', snr_filename='snr_lsstpg_wide_60')
     r = plot_sigc_vs_z(lsstpg,  delta=3., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
+                       zmax=0.5, sigc_filename='sigc_lsstpg_wide_30_cad3', snr_filename='snr_lsstpg_wide_30_cad3')
+    r = plot_sigc_vs_z(lsstpg,  delta=4., exptimes={'LSSTPG::g': 30, 'LSSTPG::r': 30, 'LSSTPG::i': 30., 'LSSTPG::z': 30.}, 
                        zmax=0.5, sigc_filename='sigc_lsstpg_wide_30_minion', snr_filename='snr_lsstpg_wide_30_minion', reference_log=log)
 
     # DDF 

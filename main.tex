@@ -23,7 +23,7 @@
 \usepackage{draftwatermark}
 \SetWatermarkScale{1}
 \SetWatermarkLightness{0.90}
-
+\usepackage{multirow}
 % Add your own macros here:
 
 
@@ -420,11 +420,11 @@ figures out how to standardize SNe in the UV).
 
 We see that once the $r$-band has been dropped, we do not have enough
 photostatistics from the $i,z,$ and $y$-band combined, to constrain
-$C$ below our target of 0.04.  Hence, our redshift limit is of about
-0.7 -- slightly deeper than SNLS (0.65). As a consequence, the depth
-of the survey needs to be increased in the redder bands. There are two
-ways to do that: either we increase the cadence, or we increase the
-depth (or both).
+$C$ below our target $\sigma_C < 0.04$.  Hence, our redshift limit is
+of about 0.7 -- only very slightly deeper than SNLS (0.65). As a
+consequence, the depth of the DDF rolling survey needs to be increased
+in the redder bands. There are two ways to do that: either we increase
+the cadence, or we increase the depth (or both).
 
 On the right panel of figure \ref{fig:sigc_vs_z_smtn002} we show what
 can be obtained with 1800-s visits (3 times the standard DDF visit)
@@ -432,8 +432,8 @@ and a cadence of 3 days. At this cost, we can build a sample complete
 up to $z \sim 0.8$. 
 
 On the upper panel of figure \ref{fig:sigc_vs_z_lse40}, we show the
-same scenarios, with the model taken from LSE-40.  This is to
-illustrate the fact that it is quite important to understand which of
+same scenarios, with the LSE-40 model.  This is essentially to
+illustrate that it is really important to understand which of
 LSE-40 or SMTN-002 is the realistic assessment of the observing
 conditions.
 
@@ -441,8 +441,9 @@ The bottom panel shows the SNR on the amplitude of the lightcurves for
 our faint fiducial SN. We see that we can reach our $\sigma_C \sim
 0.04$ target, as long as we can secure a integrate SNR of 60 in $i$
 and $35$ in $z$.  In $y$, obtaining these levels of signal to noise
-seems to be very hard. Obtaining $SNR=10$ up to $z\sim 0.8$ does the
-job, as long as the two other bands reach the targets listed above.
+seems to be very hard. Obtaining $SNR=10$ up to $z\sim 0.8$ seems to
+be enough, as long as the two other bands reach the targets listed
+above.
 
 
 % We present 4 different scenarios:
@@ -474,18 +475,20 @@ job, as long as the two other bands reach the targets listed above.
 \label{fig:sigc_vs_z_lse40}
 \end{figure*}
 
-These figures are a representative subset of what has been explored.
-We see that obtaining a good follow-up for the faint end of the SN
-distribution requires at least doubling the exposure time of each
-visit {\em and} the cadence. Doing so (and assuming \code{SMTN-002})
-allows one to build a sample that is almost complete up to $z \sim
-0.8$. Table \ref{tab:nominal_scenario_DDF} summarizes the cadence,
-exspoure times and the average $5-\sigma$ depth per visit. We propose
-this a a ``nominal'' cadence and depth for the DDF. We note that
-implementing it requires a partial recadencing similar to what has
-been proposed for the wide component of the survey.
+These figures are a representative subset of what has been explored so far. 
 
-\begin{table*}
+We see that pushing the completeness limit to $s \sim 0.9$ seems to be
+essentially inaccessible.  Obtaining a survey complete up to $z \sim
+0.8$ or more requires at least tripling the exposure time and securing
+a high cadence of about 3 days.
+
+Table \ref{tab:nominal_scenario_DDF} summarizes the cadence, exsposure
+times and the average $5-\sigma$ depth per visit. We propose this a a
+``nominal'' cadence and depth for the DDF. We note that implementing
+it requires a partial recadencing similar to what has been proposed
+for the wide component of the survey.
+
+\begin{table*}[t]
 \begin{center}
 \caption{A nominal scenario for the DDF that allows to build a SN
   sample complete up to $z \sim 0.75$.}
@@ -515,14 +518,18 @@ understand the origin of the differences between \cite{LSE-40} and
 
 \subsection{Wide fields}
 
-We have produced th 
+We have performed a similar study for the wide fields. We show on
+figure \ref{fig:sigc_vs_z_wide} the evolution of
+$\sigma_C$ for the standard visits (30-s in $griz$) and a cadence of 4
+days. On the right panels, we show the same, figures, with a cadence
+slightly improved (3 days).
 
-\begin{figure*}
+\begin{figure*}[t]
 \begin{center}
 \subfigure[\code{SMTN-002} -- standard visits]{\includegraphics[width=0.49\linewidth]{sigc_lsstpg_wide_30.pdf}}
-\subfigure[\code{SMTN-002} -- deeper]{\includegraphics[width=0.49\linewidth]{sigc_lsstpg_wide_60.pdf}}
+\subfigure[\code{SMTN-002} -- deeper]{\includegraphics[width=0.49\linewidth]{sigc_lsstpg_wide_30_cad3.pdf}}
 \subfigure[\code{SMTN-002} -- standard visits]{\includegraphics[width=0.49\linewidth]{snr_lsstpg_wide_30.pdf}}
-\subfigure[\code{SMTN-002} -- deeper]{\includegraphics[width=0.49\linewidth]{snr_lsstpg_wide_60.pdf}}
+\subfigure[\code{SMTN-002} -- deeper]{\includegraphics[width=0.49\linewidth]{snr_lsstpg_wide_30_cad3.pdf}}
 \end{center}
 \caption{Upper panels: $\sigma_C$ (shot noise only) obtained on the
   standard fields as a function of redshift.  On the left, for the
@@ -530,15 +537,23 @@ We have produced th
   the exposure times in $r$ and $i$.  (same cadence).  Lower panels:
   SNR obtained on the light curve amplitude, as a function of
   redshift.}
-\label{fig:sigc_vs_z_4_day_cadence_wide}
+\label{fig:sigc_vs_z_wide}
 \end{figure*}
 
+We see that is is relatively easy to reach a completeness limit of $z
+\sim 0.4$, with the standard visits and a cadence of 3 to 4 days
+(observer frame).  We summarize our nominal target cadence in table
+\ref{tab:nominal_scenario_wide}. Whether the survey can deliver such a
+cadence for the wide will be discussed in sections
+\ref{sec:wide_cadence} and \ref{sec:rolling_cadence}, that will be
+based on realistic \code{OpSim} simulations.
 
-\begin{table*}
+
+\begin{table*}[t]
 \begin{center}
 \caption{A nominal scenario for the wide that allows to build a SN
   sample complete up to $z \sim 0.4$.}
-\label{tab:nominal_scenario_DDF}
+\label{tab:nominal_scenario_wide}
 \begin{tabular}{l|cccc}
 \hline
 \hline
@@ -554,16 +569,17 @@ Target amplitude SNR & $>30$ & $>40$ & $>30$ & $>20$ \\
 \end{table*}
 
 
+Now, we will present simple metrics, that can be turned into powerful
+tools to evaluate \code{OpSim} cadences without having to explicitely
+simulate and fit supernova lightcurves.  They all are based on the
+Fisher matrix of the (monoband) light curve fit to evaluate the total
+SNR we obtain on the amplitude of the SN lightcurve.
+
+
 
 % ----------------------------------------------------------------------
-
-
-
-\section{A metric to evaluate a cadence}
+\section{Two useful metrics to evaluate a cadence}
 \label{sec:metric}
-
-We now show how our LC requirements above translate into a simple
-cadence-depth requirement.
 
 
 \subsection{The signal-to-noise on the light-curve amplitude}
@@ -593,11 +609,25 @@ This metrics is easy to compute, all it takes is a tabulated model of
 the light curve shape, and a cadence file, containing, for each visit,
 an assessment of the $5\sigma$-depth reached during that visit. 
 
+In tables \ref{tab:nominal_scenario_DDF} and
+\ref{tab:nominal_scenario_wide}, we have specified target SNR for the
+light curve amplitude (in each band).  It is then relatively easy to
+implement formula \ref{eqn:snr} in the survey scheduler, to evaluate
+whether a light curve at some phase (say +30 restframe days) has
+integrated enough photostatistics to reach the SNR target in a given
+band -- and alter the observation priority accordingly.
 
-\subsection{Requirements on the survey cadence and depth}
 
-Using the metric above, we can characterize the survey cadence and
-depth that allow to fulfill the requirements above.
+\subsection{A global metric to evaluate the quality of a search \& follow-up season}
+
+The metric above is ``local'', in the sense that it allows to evaluate
+the cadence and depth delivered by the survey at a given time. It is
+extremely useful to check the regularity of the observations and react
+in real time. 
+
+Now, we would like to present another metric that could allow to
+evaluate the quality of the cadence and depth delivered by the survey
+on an entire season. 
 
 Let's define $\delta(t_i) = \delta_i$, which is equal to the number of
 observations in an interval $\Delta t$ around $t_i$ (we express
@@ -621,34 +651,45 @@ L_i^2/\sum_i L_i^2$.  This sets a limit (in $\frac{e^-}{s}
 \sqrt{day}$) on the product of the limiting flux times inverse square
 root of the cadence.
 
-This simple metric allows one to estimate the power of a cadence
-without having to generate and fit supernova light curves.  Of course,
-a supernova scientist is still needed, to compute the numerical values
-of the upper limits that appears in equation \ref{eqn:global_metric}
-For the records, we report these values in table
-\ref{tab:cadence_depth_limit}. They have been computed with SALT-2.4
-and the \code{SMTN-002} instrument model (see below).
 
 \begin{table}[t]
 \begin{center}
-\caption{cadence-depth limit for a $[X_1=-2, C=0.25]$ SN~Ia and a target SNR=20/band}
+\caption{cadence-depth limit for a $[X_1=-2, C=0.2]$ SN~Ia}
 \label{tab:cadence_depth_limit}
-\begin{tabular}{l|rrrrr}
+\begin{tabular}{l|c|rrrrr}
 \hline
 \hline
-    $z$   &      $g$         &       $r$         &     $i$           &      $z$        &      $y$           \\
-          &      \multicolumn{5}{c}{$[\mathrm{e^-/s \times \sqrt{day}}]$} \\
+ &   redshift   &      $g$         &       $r$         &     $i$           &      $z$        &      $y$           \\
+ &              &      \multicolumn{5}{c}{$[\mathrm{e^-/s \times \sqrt{day}}]$} \\
 \hline
-     0.2  &     386 &     526 &     470 &     251 &     103   \\
-     0.3  &     123 &     207 &     193 &     150 &      52   \\
-     0.4  &      39 &     110 &     109 &      84 &      33   \\
-     0.5  &      15 &      64 &      59 &      51 &      27   \\
-     0.6  &         &      35 &      38 &      36 &      17   \\
-     0.7  &         &      18 &      28 &      23 &      13   \\
-     0.8  &         &         &      21 &      16 &      10   \\
-     0.9  &         &         &      14 &      13 &       7   \\
-     1.0  &         &         &       9 &      10 &       5   \\
-     1.1  &         &         &       5 &       8 &       4   \\
+  \multicolumn{2}{l}{Target SNR}  &     30  &      40 &      30 &      20 & \\
+\hline
+ \multirow{4}{*}{wide}  &     0.2  &     291 &     264 &     335 &     299 & \\
+                        &     0.3  &     117 &     160 &     139 &      97 & \\
+                        &     0.4  &      63 &      90 &      80 &      32 & \\
+                        &     0.5  &      37 &      55 &      44 &      12 & \\
+\hline
+  \multicolumn{2}{l}{Target SNR} &  & 25 &     60  &  35     &      20   \\
+\hline
+  \multirow{7}{*}{DDF}                       &     0.5  &    & 59 &      32 &      22 &      29   \\
+                       &     0.6  &    & 33 &      23 &      14 &      18   \\
+                       &     0.7  &    & 18 &      14 &      11 &      14   \\
+                       &     0.8  &    &    &      10 &       8 &      11   \\
+                       &     0.9  &    &    &       8 &       5 &       7   \\
+                       &     1.0  &    &    &       7 &       3 &       5   \\
+                       &     1.1  &    &    &       6 &       2 &       5   \\
+
+
+     % 0.2  &     386 &     526 &     470 &     251 &     103   \\
+     % 0.3  &     123 &     207 &     193 &     150 &      52   \\
+     % 0.4  &      39 &     110 &     109 &      84 &      33   \\
+     % 0.5  &      15 &      64 &      59 &      51 &      27   \\
+     % 0.6  &         &      35 &      38 &      36 &      17   \\
+     % 0.7  &         &      18 &      28 &      23 &      13   \\
+     % 0.8  &         &         &      21 &      16 &      10   \\
+     % 0.9  &         &         &      14 &      13 &       7   \\
+     % 1.0  &         &         &       9 &      10 &       5   \\
+     % 1.1  &         &         &       5 &       8 &       4   \\
  
      % 0.2  &     916 &    1330 &    1262 &     704 &     289   \\
      % 0.3  &     284 &     513 &     495 &     421 &     149   \\
@@ -665,25 +706,25 @@ and the \code{SMTN-002} instrument model (see below).
 \end{center}
 \end{table}
 
+Again, this simple metric allows one to estimate the (global) power of
+the cadence and depth delivered over one season for one given field,
+without having to generate and fit supernova light curves.  Of course,
+a supernova scientist is still needed, to compute the numerical values
+of the upper limits that appears in equation \ref{eqn:global_metric}
+For the records, we report these values in table
+\ref{tab:cadence_depth_limit}. They have been computed with
+\code{snsim} based on \code{SALT-2.4} and the \code{SMTN-002}
+instrument model.
+
 In the next sections, we show how the most recent \code{Minion\_1016}
 cadence compares to our cadence-depth requirements, using the metric
-above.  Before we do that, we must discuss the estimation of the
-5-$\sigma$ depth. 
-
-
-
+above.  
 
 
 
 % ----------------------------------------------------------------------
 \section{The deep SN survey on the DDF fields}
 \label{sec:ddf_cadence}
-
-
-
-
-\subsection{The DDF cadence from \code{Minion\_1016}}
-\label{sec:results}
 
 
 \begin{figure*}[t]
@@ -707,7 +748,6 @@ above.  Before we do that, we must discuss the estimation of the
 \end{center}
 \end{figure*}
 
-\paragraph{Median depth and cadence needed to match the requirements}
 The constrains described in equation \ref{eqn:global_metric} can be
 represented graphically in the $m_{5\sigma}$-cadence plane. We do this
 on figure \ref{fig:m5_cadence_limits_ddf}, for the bands of interest
@@ -715,26 +755,31 @@ for an intermediate and/or deep survey ($rizy$).
 
 This plot allows one to quantify the nominal survey cadence and depth
 that are required to operate a survey up to a given redshift limit.
-As we target an observer-frame cadence ($^{-1}$) of 4 days, we need to
-reach depths of 26.3, 25.7 and 25.7 per-visit, in the $i, z$ and $y$
-bands, respectively. We may relax the cadence requirement, but this
-needs to be compensated by increasing the median visit depth.
+The isocontours correspond to various relevant redshift limits. To
+match the requirements needed to reach a given redshift limit, we need
+to be {\em below} the corresponding isocontour. As can be seen from
+equation \ref{eqn:global_metric}, we can play on the cadence or depth,
+to reach a given limit. For example, we may relax the cadence
+requirements, at the price of increasing the depth of the survey.
+
+On the same plots, we have represented with red stars the nominal
+cadence and depth listed in table \ref{tab:nominal_scenario_DDF}.
+Note than this nominal scenario is something that is possible at the
+price of tripling the standard DDF exposure times (and achieving an
+average inverse cadence of 3 days).
 
 
 
-
-
-
-\paragraph{Where we are now, with \code{Minion\_1016}} We can show on
-the same graph the median cadence and depth computed for each DDF
+\paragraph{Where we are now, with \code{Minion\_1016}} We have shown,
+on the same graph, the median cadence and depth computed for each DDF
 field, from the \code{Minion\_1016} sequences. We have 5 DDF, each
 spanning 10 search seasons (ten years of operations).  This gives 50
 cadence-depth realizations, which we represent with red and blue
 crosses correspond to two sky models : the one implemented in
-\code{OpSim v3.3.5} \cite{1991PASP..103.1033K} and a new sky model that will be
-available for the next \code{OpSim} versions. 
+\code{OpSim v3.3.5} \cite{1991PASP..103.1033K} and a new sky model
+that will be available for the next \code{OpSim} versions.
 
-To match the cadence-depth requirements at a given redshift, we need
+Again, to match the cadence-depth requirements at a given redshift, we need
 to be {\em below} the corresponding line {\em in the $i$, $z$ and $y$
   bands simultaneously}. We see that the average cadence delivered by
 the survey is about a factor 2 below our target. In the $i$ and $z$
@@ -767,7 +812,7 @@ efficient to assess a nominal cadence and depth, and to evaluate a
 whole \code{OpSim} run. We also want to check the regularity of the cadence
 over a season. This can be done by computing, in each relevant band,
 the SNR that can be obtained on the amplitude of the lightcurve
-(following equation \ref{eqn:snr}), as a function of the SN peak date.
+(following equation \ref{eqn:snr}), as a function of the SN peak date (the first metric presented in the previous section).
 
 This is what we show  on figure \ref{fig:snr_metric}, for our fiducial
 faint SN at a  redshift $z=1$, for one of the DDF  fields, and for the
@@ -783,28 +828,11 @@ depth of the visits in such a  way that the SNR stays above the target
 SNR in all relevant bands during the season.
 
 
-% \paragraph{What is the effective depth of the DDF survey ?}
-
-% On figure \ref{fig:sigma_color_vs_z}, we show the SALT2 color
-% uncertainty (shot noise only) as a function of the redshift of our
-% $X_1=-2, C=0.25$ SN for the first season of field \#290 (the one of
-% figure \ref{fig:snr_metric}).  We see that the redshift limit is
-% $z_{lim} \sim 0.7$.  This is comparable to what SNLS was able to
-% deliver, and probably far below what LSST can deliver. 
-
-% \begin{figure}[t]
-% \begin{center}
-% \subfigure[season \#1]{\includegraphics[width=0.48\linewidth]{sigma_c_vs_z_DDF_290_0.pdf}}
-% \subfigure[season \#3]{\includegraphics[width=0.48\linewidth]{sigma_c_vs_z_DDF_290_2.pdf}}
-% \caption{Color uncertainty (shot noise only) as a function of redshift, for two seasons of DDF field \#290.}
-% \label{fig:sigma_color_vs_z}
-% \end{center}
-% \end{figure}
 
 
 \paragraph{~} Our (temporary) conclusions for the DDF fields are that:
 \begin{itemize}
-\item in all bands, the cadence is about a factor 2 lower than our target.
+\item in all bands, the cadence is about a factor 2 to 3 lower than our target. 
 \item the season-to-season dispersion of the cadence is
   significant. It could be reduced if one monitors the recent cadence
   and depth within the scheduler, and tune the cadence and depth
@@ -813,13 +841,9 @@ SNR in all relevant bands during the season.
   is 0.5-mag and 0.25-mag lower than our target (resp). In the
   $y$-band the depth is 1.75-mag below our target, but this is
   probably due to the fact that the Minion sky level is incorrect in that band.
-\item in the $i$ and $z$ bands, increasing the cadence by a factor 2,
-  and keeping the per-visit depth similar allows one to reach the
-  target. In the $y$ band, we do not know (yet) what to say, except
-  that we need to check the sky model.
 \item the cadence and depth vary quite significantly as a function of
   time, within a season. Again, computing on the fly the amplitude SNR
-  for the [$X_1=-2, C=0.25$] SN at the targeted limiting redshift, and
+  for the [$X_1=-2, C=0.2$] SN at the targeted limiting redshift, and
   making sure that it stays above 20 in the $izy$ bands, would allow
   to to stay above $z_{lim}$ for the whole duration of the search
   season.
@@ -831,14 +855,11 @@ SNR in all relevant bands during the season.
 \section{The Wide LSST SN survey}
 \label{sec:wide_cadence}
 
-
-
-
-We have produced the same plots the main (shallow, wide)
-survey. Figure \ref{fig:m5_cadence_limits_wide} shows the cadence {\em
-  vs.}  $m_{5\sigma}$ plane for the wide survey.  The red stars
-indicates the depth to attain, with a 4-day observer-frame cadence
-(22.9, 22.5, 22.3 in $r, i, $ and $z$ respectively).
+We have produced the similar plots for the main (shallow, wide) survey
+(no recadencing). Figure \ref{fig:m5_cadence_limits_wide} shows the
+cadence {\em vs.}  $m_{5\sigma}$ plane for the wide survey.  The red
+stars indicates the depth to attain, with a 4-day observer-frame
+cadence (22.9, 22.5, 22.3 in $r, i, $ and $z$ respectively).
 
 The red and blue crosses indicate what we get from \code{Minion\_1016}
 for all  wide fields. Red crosses correspond to the sky model implemented in
