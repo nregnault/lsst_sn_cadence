@@ -309,11 +309,12 @@ described in \cite[][hereafter LSE-40]{LSE-40}.
 
 \code{LSE-40} has been revised recently. The most recent model (as far
 as we know) is presented in \cite[][hereafter SMTN-002)]{SMTN-002}.
-The details and \code{LSE-40} and \code{SMTN-002} are discussed in
+The details of \code{LSE-40} and \code{SMTN-002} are discussed in
 appendix \ref{sec:lsst_instrument_models}.  In particular, the model
 characteristics are listed in tables \ref{tab:lse40} and
 \ref{tab:smtn002}, the model throughputs are compared on figure
-\ref{fig:throughput_comparison}.
+\ref{fig:throughput_comparison} and the throughput ingredients (mirror
+reflectivities, filters ...) on figure \ref{fig:passband_constituents}.
 
 We note that the throughput of \code{SMTN-002} is almost 40\% lower
 than that of \code{LSE-40}.  While the latter model was probably a
@@ -341,7 +342,7 @@ by DES.  In the $y$-band, the Minion prediction is strictly equal to
 17.3 and shows no variation with the moon phase.  We believe that the
 \code{Minion\_1016} sky level is not valid in the $y$-band. As we will
 see in the following of this note, this affects our ability to predict
-the effective depth of the DDF survey.
+the effective depth of the DDF survey. 
 
 \begin{figure}[t]
 \begin{center}
@@ -351,12 +352,6 @@ the effective depth of the DDF survey.
 \end{center}
 \end{figure}
 
-% We have compared all those values with the median seeing and sky
-% background computed from the \code{Minion\_1016} logs. Again, the
-% median seeing of Minion is considerably worse than that of
-% \code{SMTN-002}.  The median sky of Minion is also significantly
-% brighter (but here, we are comparing a median sky background with the
-% assessment of a dark sky background).
 
 On figure \ref{fig:lsst_model_summary}, we compare the throughtput
 (ZP), median seeing and sky of LSE-40, SMTN-002 and
@@ -366,12 +361,15 @@ and \code{SMTN-002} instrument model and observing conditions, and (2)
 the \code{SMTN-002} instrument model and Minion median observing
 conditions. We note that the median depth predicted by \code{Minion}
 is 0.8 to 1 mag lower that what was inferred from LSE-40 in the
-\cite{2014A&A...572A..80A} study.
-
+\cite{2014A&A...572A..80A} study. As we will see below, this has a
+severe impact on the cost of the LSST SN survey -- of the DDF survey
+in particular.
 
 As a conclusion, the results presented below will need to be updated
 as our understanding of the instrument model and observing conditions
-at Cerro Pachon improves.
+at Cerro Pachon improves. 
+
+
 
 
 % ----------------------------------------------------------------------
