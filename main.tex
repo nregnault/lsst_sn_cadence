@@ -95,15 +95,20 @@
 
 In this note, we examine the cadence envisioned for the 10 years of
 LSST operations.  In \S\ref{sec:design_notes} we discuss the key
-requirements that drive the design of a SN survey.  We then
-(\S\ref{sec:metric}) present a metric that will allow us to evaluate
-efficiently a survey cadence without having to rely on extensive
-simulations.  In the next three sections (\S\ref{sec:ddf_cadence},
-\S\ref{sec:wide_cadence}, \S\ref{sec:rolling_cadence}), we apply
-this metric to the \code{OpSim} DDF, wide and rolling-wide cadences
-respectiveley. We conclude in \S\ref{sec:conclusions}.
-
-
+requirements that drive the design of a SN survey.  We then (\S
+\ref{sec:instrument_model_summary}) discuss the models that we used to
+assess the flux uncertainties affecting the LSST flux measurements.
+In light of the expected 5-$\sigma$ depth of the LSST visits we
+evaluate (\S\ref{sec:effective_depth}) the depth of the wide and DDF
+SN surveys, and we derive a nominal cadence and depth that would allow
+us to build complete samples up to a redshift of 0.4 (wide) and 0.8
+(deep). In \S\ref{sec:metric} present a metric that permits to
+evaluate efficiently a survey cadence (e.g. from a \code{OpSim} run)
+without having to rely on extensive simulations.  In the next three
+sections (\S\ref{sec:ddf_cadence}, \S\ref{sec:wide_cadence},
+\S\ref{sec:rolling_cadence}), we apply this metric to the \code{OpSim}
+DDF, wide and rolling-wide cadences respectiveley. We conclude in
+\S\ref{sec:conclusions}.
 
 
 
@@ -145,16 +150,10 @@ survey design. Once we have chosen $z_{lim}$, we need to build the cadence
 that delivers a complete sample up to that redshift limit. 
 
 
-% to select a
-% cadence that allows one to build a {\em redshit limited sample}, up to
-% a redshift limit, $z_{lim}$. 
 
-% A sound approach, is to set a redshift limit (this is a scientific
-% decision, based on what we expect from the SN~Ia Hubble diagram in
-% the global cosmology fit), and then to design the cadence that
-% permit to build a complete sample up to that redshift limit.
+%% \paragraph{Redshift-limited sample} 
 
-\paragraph{Redshift-limited sample} Note that this ``redshift-limit''
+Note that this ``redshift-limit''
 is not a detectability limit. It is the redshift value beyond which
 we start losing a fraction of the events, because their photometric
 follow-up is not good enough to (1) measure a distance and (2) perform
@@ -171,22 +170,6 @@ has a follow-up which is ``good enough'' to (1) identify it
 photometrically as a SN~Ia and (2) derive a standardized distance from
 its lightcurve.
 
-To define the parameter space region of interest, we propose to
-proceed as follows: up to a good approximation, SNe~Ia form a
-2-dimensional family, that may be indexed for example with color and
-lightcurve-width (for example, the SALT2-color and the
-SALT2-$X_1$-parameter).  On figure \ref{fig:jla_X1_C}, we show the
-distribution of the JLA supernovae, in the $(X_1,C)$ parameter
-space. We note sizeable differences between the nearby and distant
-SNe, in particular in $X_1$.  However, we see that the full JLA sample
-is comprised in the region $X_1 = [-3,3], Color= = [-0.3, 0.3]$.
-
-The much larger LSST samples will contain events that are outside that
-region of interest.  However, we can infer from JLA that the core of
-the distribution of SN~Ia is well contained in it -- at all redshifts
-below 1.
-
-
 \begin{figure}[t]
 \begin{center}
 \includegraphics[width=0.75\linewidth]{sn_parameter_space.pdf}
@@ -196,11 +179,36 @@ below 1.
 \end{center}
 \end{figure}
 
-On the same figure, we have marked in red the faintest SN in that
-parameter space ($X_1=-2, Color=0.25$). To be complete up to $z_{lim}$,
-the survey has to deliver a cadence that allows to derive a luminosity
-distance and a photometric identification for an event of such $X_1$
-and Color, at a redshift $z_{lim}$.
+To define the parameter space region of interest, we propose to
+proceed as follows: up to a good approximation, SNe~Ia form a
+2-dimensional family, that may be indexed for example with color and
+lightcurve-width (for example, the SALT2-color and the
+SALT2-$X_1$-parameter).  On figure \ref{fig:jla_X1_C}, we show the
+distribution of the JLA supernovae, in the $(X_1,C)$ parameter
+space. We note sizeable differences between the nearby and distant
+SNe, in particular in $X_1$.  However, we see that the full JLA sample
+is comprised in the region $X_1 = [-3,3], Color= = [-0.3, 0.3]$. 
+
+The core of the distribution is in fact encircled in a smaller region
+(red ellipse). Two extreme events have been marked on the same figure:
+the red dot corresponds to a faint SN ($X_1=-2, C=0.2$), while the
+blue dot correspond to a bright ($X_1=2, C=-0.2$) event. To be
+complete up to $z_{lim}$, the survey has to deliver a cadence that
+allows to derive a luminosity distance and a photometric
+identification for an event of such $X_1$ and Color, at a redshift
+$z_{lim}$. 
+
+The much larger LSST samples will contain events that are outside that
+region of interest.  However, we can infer from JLA that the core of
+the distribution of SN~Ia is well contained our ellipse -- at least at
+all redshifts below 1.
+
+In what follows, we will sometimes refer to our ``standard faint SN''
+($X_1=-2, C=0.2$) our standard bright SN ($X_1=2, C=-0.2$) and of our,
+the average SN ($X_1=0, C=0$). These are the three fiducial events
+that need to be studied in detail to assess the cadence of a the
+survey.
+
 
 \paragraph{Lightcurve quality requirements} Light curve quality
 requirements have been discussed a few years ago, for the LSST-Euclid
@@ -365,7 +373,7 @@ at Cerro Pachon improves.
 
 % ----------------------------------------------------------------------
 \section{The effective depth of the DDF and Wide surveys}
-\label{sec:effective depth}
+\label{sec:effective_depth}
 
 \subsection{DDF fields}
 

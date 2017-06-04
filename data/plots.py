@@ -6,6 +6,7 @@ import sys
 
 import numpy as np
 import pylab as pl 
+from matplotlib.patches import Ellipse
 
 from croaks import NTuple
 
@@ -57,6 +58,10 @@ def figure1():
     pl.plot(+2., -0.2, marker='o', color='blue', markersize=16)    
     pl.annotate('brightest SN', (+2., -0.27), xytext=(2,-0.35),
                 arrowprops={'facecolor': 'b', 'shrink': 0.05})
+
+    e = Ellipse(xy=(0.,0.), width=5.6, height=0.56, fill=False, color='red', linestyle='dashdot')
+    ax = pl.gca()
+    ax.add_artist(e)
 
 
     fig.savefig('sn_parameter_space.pdf', bbox_inches='tight')
