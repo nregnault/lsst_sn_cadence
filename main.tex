@@ -1194,21 +1194,23 @@ cadences become available.
 \section{LSST instrument models}
 \label{sec:lsst_instrument_models}
 
-We  have used  two instrument  models.  One  is based  on the  numbers
-reported  in \cite[][LSE-40  hereafter]{LSE-40}.  We  report the  main
-ingredients of this model in table \ref{tab:lse40}.
+The measurement errors and 5-$\sigma$ depth used have been computed
+either with two codes: (1) the
+\href{https://www.lsst.org/scientists/simulations/maf}{Metric Analysis
+  Framework} (MAF) used within LSST-DESC and (2) a recent rewrite of
+{\tt snsim} supernova simulator that was used to carry out the
+LSST-Euclid forecasts for presented in \cite{2014A&A...572A..80A}.
+Both codes implement a very similar approach and give very similar
+results, provided that they are fed with the same throughput curves,
+PSF model, seeing and sky brightness values.
 
-The other model is described in \cite[][hereafter
-SMTN-002)]{SMTN-002}, which constitutes a preliminary update of
-LSE-40.  The current version \code{OpSim} relies on SMTN-002. An we therefore
-adopt this model as our reference. Key quantities of SMTN-002 are
-listed in table \ref{tab:smtn002}.
-
-We note that both models differ very significantly. In particular (1)
-the throughput of SMTN-002 is almost 50\% lower.
+While comparing the two codes, we noticed that the official LSST
+assessment of the telescope throughput has been revised very
+significantly over the last few years. 
 
 
-\begin{table}
+
+\begin{table}[t]
 \begin{center}
 \caption{LSE-40 model}
 \label{tab:lse40}
@@ -1249,7 +1251,29 @@ snsim (Moffat, $\beta=7$)     & 24.27  &  25.18 &  24.73  &  24.36  &  23.77  & 
 \end{table}
 
 
-\begin{table}
+{\tt snsim} was originally using numbers reported in the official,
+Change Controlled Document \cite[][LSE-40 hereafter]{LSE-40}.  The
+forecasts presented in \cite{2014A&A...572A..80A} were based on this
+model.  The LSE-40 throughput curves are displayed on figure
+\ref{fig:throughput_lse40}.  The key quantities of this model, in
+particular, the expected median seeing and dark sky brightness are
+listed in table \ref{tab:lse40}.  The connections between this model
+of the observations and the LSST data products have been discussed in
+depth in \citep{2008arXiv0805.2366I}.
+
+The model presented in LSE-40 seems to have been revised recently,
+although the LSE-40 document itself has not been changed (yet). The
+update is described in \cite[][hereafter SMTN-002)]{SMTN-002}.  The
+new throughput curves (extracted from MAF) are shown on figure
+\ref{fig:throughput_smtn002}.  The key quantities (seeing, sky etc)
+are listed in table \ref{tab:smtn002}.  It seems that \code{OpSim} and
+\code{MAF} now rely on \code{SMTN-002}.  We have incorporated SMTN-002
+into our \code{snsim} SN simulation code, and (unless specified
+otherwise) all the computations presented in this code have been
+carried out with SMTN-002.
+
+
+\begin{table}[t]
 \begin{center}
 \caption{SMTN-002 model}
 \label{tab:smtn002}
@@ -1292,12 +1316,61 @@ snsim (Moffat, $\beta=7$)   &  23.61     &  24.83     &  24.35     &   23.88    
 
 \begin{figure}[t]
 \begin{center}
-\subfigure[LSE-40]{\includegraphics[width=0.45\linewidth]{lse_40_passbands.pdf}}
-\subfigure[SMTN-002]{\includegraphics[width=0.45\linewidth]{smtn002_passbands.pdf}}
+\subfigure[LSE-40]{\includegraphics[width=0.45\linewidth]{lse_40_passbands.pdf}\label{fig:throughput_lse40}}
+\subfigure[SMTN-002]{\includegraphics[width=0.45\linewidth]{smtn002_passbands.pdf}\label{fig:throughput_smtn002}}
 \caption{Instrument passbands}
 \label{fig:throughput_comparison}
 \end{center}
 \end{figure}
+
+We note howeverthat both models differ very significantly.  As can be
+seen on figure \ref{fig:throughput_comparison} the throughput of
+\code{SMTN-002} is almost 40\% lower than that of \code{LSE-40}, and
+the associated zero points are lower by about 0.5-mag.  
+
+\begin{figure}[t]
+\begin{center}
+\subfigure[Mirror reflectivities ($M_1 \times M_2 \times M_3)$]{\includegraphics[width=0.49\linewidth]{mirror_reflectivity.pdf}}
+\subfigure[Optics transmission]{\includegraphics[width=0.49\linewidth]{optics_transmission.pdf}}
+\subfigure[CCD QE]{\includegraphics[width=0.49\linewidth]{ccd_qe.pdf}}
+\subfigure[Filters]{\includegraphics[width=0.49\linewidth]{filters.pdf}}
+\caption{Systematic comparison of the constituents of the model
+  passbands. For the CCD QE, we over plot the average of recent QE
+  curves obtained by the project, for E2V and ITL sensor candidates. }
+\label{fig:passband_constituents}
+\end{center}
+\end{figure}
+
+On figure \ref{fig:passband_constituents} we compare the ingredients
+of the LSE-40 and SMTN-002 throughput curves.  We see that the main
+difference come from the mirror reflectivity. The overall transmission
+of the optics follow, as well as the assessment of the filter peak
+transmission.  It would be very useful to know whether SMTN-002 is
+considered a non-consevative assessment of what is expected or whether
+it is some kind of worst case model.
+
+The the median seeing values have been revised upwards very
+significantly. We do not know yet whether it comes from a revision of
+the site image quality, or whether is is related to changes of the PSF
+model. In any case, we are able to reproduce the 5-$\sigma$ depths
+quoted in \cite{LSE-40} and \cite{SMTN-002} with \code{snsim} without
+changing the PSF model (we use a moffat PSF with $\beta=7$).
+
+Regarding the dark sky brightness, we note that it has also been
+revised upwards quite significantly (see tables \ref{tab:lse40} and
+\ref{tab:smtn002}).
+
+All these changes, combined, make that the 5-$\sigma$ depth of the
+standard 30-s LSST visist has to be revised downwards by about
+0.5-mag. This is a significant downgrade, which impacts severely the
+cost of the LSST SN survey (the DDF survey in particular).
+
+Finally, we note that \code{OpSim} attempts to predict realistic
+values of seeing and sky brightness (LSE-40 and SMTN-002) list values
+for observations at zenith and dark sky. The median values obtained
+from \code{OpSim} are significantly higher. The resulting 5-$\sigma$
+depth is almost 0.5-mag and 1-mag lower than what can be inferred from
+SMTN-002 and LSE-40 respectively. 
 
 
 
