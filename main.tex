@@ -938,7 +938,7 @@ strategy with the \code{OpSim} version (v3.3.5) used to produce the \code{Minion
 file, we have faked a rolling cadence by merging subsets of three WFD
 fields in a coherent way. The basic principle is the following. Let us
 consider three sets of observations corresponding to WFD fields,
-namely \fia, \fib, and \fic, and a merging factor m
+namely \fia, \fib, and \fic, and a mixing rate m
 (0$\leq$m$\leq$1).  Observations corresponding to the rolling cadence
 will be denoted \fiap, \fibp, and \ficp. The first season is kept
 untouched. Observations related to the second season (and also to
@@ -959,7 +959,7 @@ merging.
 \begin{center}
 \caption{Procedure used to merge WFD fields to fake a rolling
   cadence. Three fields are used here but one could extend the
-  procedure up to nine.The merging factor m was set to 0.8.}
+  procedure up to nine.The mixing rate m was set to 0.8.}
 \label{tab:rolling_cadence}
 \begin{tabular}{c|l}
 \hline
@@ -995,15 +995,15 @@ and 8),\fibp (seasons 3, 6, and 9), and \ficp (seasons 4, 7, and
 observations while keeping good observing conditions : airmass were
 requested to lie in the range [1,1.5] (this upper limit was imposed by \code{OpSim}
 when producing the \code{Minion\_1016} cadence), the Moon phase lower
-than 60\% and the Moon zenith distance higher than 85$^°$. Observations at twilight were not accepted.
+than 60\% and the Moon zenith distance higher than 85 degrees. Observations at twilight were not accepted.
 
 \begin{figure*}[t]
   \begin{center}
     \includegraphics[width=\linewidth]{figures/Rolling_fields.pdf}
     \caption{Observing strategy corresponding to the rolling
       cadence. Blue, red and black crosses correspond to fields
-      observed during seasons (2,5,8), (3,6,9), and
-      (4,7,10), respectively.}
+      observed during seasons (2,5,8) (fielda), (3,6,9) (fieldb), and
+      (4,7,10) (fieldc), respectively.}
     \label{fig:rolling_strategy}
   \end{center}
 \end{figure*}
@@ -1101,7 +1101,16 @@ in this band.
 Figure \ref{fig:m5_cadence_limits_rolling} shows the cadence {\em
   vs.}  $m_{5\sigma}$ plane for the wide survey.  The red stars
 show the depth to attain, with a 3-day observer-frame cadence
-(24.83, 24.35, 23.88 and 23.30, in $g, r, i$ and $z$ respectively).
+(24.83, 24.35, 23.88 and 23.30, in $g, r, i$ and $z$ respectively). .  If we target a survey complete up to $z_{lim} \sim 0.4$
+we find that:
+\begin{itemize}
+  \item in $r$ , and $ i$, we go deep enough with the standard visits;
+  \item $g$ and $z$ bands are not deep enough. Reaching the goal
+    $z_{lim} \sim 0.4$ would require to double the exposure time in
+    the $z$ band;
+  \item the $z_{lim} \sim 0.4$ seem reachable for the $r$ and $i$
+    bands by doubling the exposure times.
+\end{itemize}
 
 
 
