@@ -1108,8 +1108,9 @@ we find that:
   \item $g$ and $z$ bands are not deep enough. Reaching the goal
     $z_{lim} \sim 0.4$ would require to double the exposure time in
     the $z$ band;
-  \item the $z_{lim} \sim 0.4$ seem reachable for the $r$ and $i$
-    bands by doubling the exposure times.
+  \item the $z_{lim} \sim 0.5$ seem reachable for the $r$ and $i$
+    bands by tripling the exposure times, as it may be predicted from figure \ref{fig:m5_expoTime},
+and as it is observed on \label{fig:m5_cadence_limits_rolling_triplexpo}.
 \end{itemize}
 
 
@@ -1131,6 +1132,26 @@ we find that:
 \label{fig:m5_cadence_limits_rolling}
 \end{center}
 \end{figure*}
+
+\begin{figure*}[t]
+\begin{center}
+\subfigure[$g$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_rolling_g_3expTime.png}}
+\subfigure[$r$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_rolling_r_3expTime.png}}\\
+\subfigure[$i$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_rolling_i_3expTime.png}}
+\subfigure[$z$]{\includegraphics[width=0.48\linewidth]{m5_cadence_limits_rolling_z_3expTime.png}}
+\caption{The cadence {\em vs.} depth requirements for the rolling cadence on the Wide survey,
+  in the $g, r, i $ and $z$-bands. The color scale corresponds to the
+  metric described in equation \ref{eqn:global_metric}.  The lines are
+  the contour-levels computed for the limits indicated on table
+  \ref{tab:cadence_depth_limit}. To fulfill the SNR requirements at a
+  given redshift, one has to be {\em below} the corresponding
+  line. The red and blue crosses show what the survey can currently
+  deliver according to \code{Minion\_1016} and the Rolling cadence
+  with an exposure time of 90 seconds, respectively.}
+\label{fig:m5_cadence_limits_rolling_triplexpo}
+\end{center}
+\end{figure*}
+
 % ----------------------------------------------------------------------
 
 \section{Conclusions}
@@ -1157,7 +1178,7 @@ of the nominal DDF visits by about a factor 3.
 
 On the wide survey, we have confirmed that the rolling cadence allows
 one to reach our target depth ($z_{lim} \sim 0.4$). Reaching $z_{lim}
-\sim 0.5$ is also within reach. It requires doubling the duration of
+\sim 0.5$ is also within reach. It requires tripling the duration of
 the $r$ and $i$-band visits.
 
 The results presented here should be taken with a bit of caution.  As
