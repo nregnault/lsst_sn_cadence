@@ -55,7 +55,7 @@
   the SN~Ia light curves that will be delivered by the LSST Wide and
   DDF surveys.  Evaluating this metric does not require to generate
   and fit SN lightcurves.  It can therefore be used to evaluate
-  efficiently years of survey operations. It simple enough to be
+  efficiently years of survey operations. It is simple enough to be
   included in the survey operation scheduler.
   
   Using this approach, we evaluate a subset of the \code{OpSim}
@@ -63,7 +63,7 @@
   cadence and depth simulated in \code{Minion\_1016} do not allow to
   build a redshift limited survey up to $z \sim 1$. For the main
   survey, the depth of the 30-s visit satisfies the requirements,
-  expect in $z$.  We are currently evaluating the rolling cadence that
+  exsept in $z$.  We are currently evaluating the rolling cadence that
   was suggested for the wide fields.
 
   The results presented in this work depend heavily on our knowledge
@@ -204,8 +204,7 @@ the distribution of SN~Ia is well contained our ellipse -- at least at
 all redshifts below 1.
 
 In what follows, we will sometimes refer to our ``standard faint SN''
-($X_1=-2, C=0.2$) our standard bright SN ($X_1=2, C=-0.2$) and of our,
-the average SN ($X_1=0, C=0$). These are the three fiducial events
+($X_1=-2, C=0.2$) our standard bright SN ($X_1=2, C=-0.2$) and our average SN ($X_1=0, C=0$). These are the three fiducial events
 that need to be studied in detail to assess the cadence of a the
 survey.
 
@@ -264,7 +263,7 @@ paper \citep{2014A&A...572A..80A}. We summarize them below:
 
 
 \paragraph{Conclusion} As a conclusion, evaluating the cadence boils
-down to evaluating the follow-up of the faintest SN~Ia ($(X_1=-2,
+down to evaluating the follow-up of the faintest SN~Ia ($X_1=-2,
 C=0.2$) around $z = z_{lim}$. Our goal is to make sure that the light
 curves of this SN of such events pass these requirements, throughout
 the whole search season.
@@ -308,7 +307,10 @@ forecasts published in \cite{2014A&A...572A..80A} used the model
 described in \cite[][hereafter LSE-40]{LSE-40}. 
 
 \code{LSE-40} has been revised recently. The most recent model (as far
-as we know) is presented in \cite[][hereafter SMTN-002)]{SMTN-002}.
+as we know) is presented in \cite[][hereafter SMTN-002)]{SMTN-002}. It
+is the current baseline throughput for LSST. Telescope components are
+available in github repositories
+https://github.com/lsst/throughput/baseline or https://github.com/lsst-pst/sysgen\_throughputs).
 The details of \code{LSE-40} and \code{SMTN-002} are discussed in
 appendix \ref{sec:lsst_instrument_models}.  In particular, the model
 characteristics are listed in tables \ref{tab:lse40} and
@@ -333,9 +335,13 @@ conditions (median seeing and dark sky background) expected by in the
 significantly, \code{SMTN-002} being again more pessimistic than
 \code{LSE-40}.
 
-\code{Minion\_1016} uses \code{SMTN-002} (or a very similar instrument
-model), but predicts larger median seeing values.  The median sky
-obtained from the \code{Minion\_1016} logs is (expectedly) brigher
+In the cadence file \code{Minion\_1016} produced with \code{OpSim
+  v3.3.5}, the five sigma depth $m_5$ is estimated from an parametric equation (see chapter 8 in \cite{SMTN-002}) taking observing conditions
+(skybrightness, airmass, seeing, exposure time) into
+account. Parameters related to filters are adjusted so as to get $m_5$
+estimated values equal to the ones computed from \code{SMTN-002} throughput. The sky brightness is
+estimated from the model described in \cite{1991PASP..103.1033K}.
+The median sky obtained from the \code{Minion\_1016} logs is (expectedly) brigher
 than the dark sky levels of \code{LSE-40} and \code{SMTN-002}. In the
 $z$ band, the Minion sky levels are high, compared to what is measured
 by DES.  In the $y$-band, the Minion prediction is strictly equal to
@@ -605,7 +611,7 @@ function of the 5-$\sigma$ limiting flux of each visit $i$, $f_{i|5}$:
   SNR = 5 \times \left(\sum_i L^2_i f^{-2}_{i|5}\right)^{1/2}
   \label{eqn:snr}
 \end{equation}
-This metrics is easy to compute, all it takes is a tabulated model of
+This metric is easy to compute, all it takes is a tabulated model of
 the light curve shape, and a cadence file, containing, for each visit,
 an assessment of the $5\sigma$-depth reached during that visit. 
 
@@ -1401,6 +1407,52 @@ from \code{OpSim} are significantly higher. The resulting 5-$\sigma$
 depth is almost 0.5-mag and 1-mag lower than what can be inferred from
 SMTN-002 and LSE-40 respectively. 
 
+As stated above, 5-$\sigma$ depth values in \code{OpSim} are estimated
+using a parametric equation (see chapter 8 of \cite{SMTN-002}) and
+should tend to $m_5$ values computed from throughput (see eq. 41 in
+\cite{LSE-40}). We have checked the precision of this equation by
+estimating the difference $\Delta m_{5} = m_{5}^{throughput}-m_{5}^{OpSim}$
+for each band using a wide field (id: 1981). The result
+(fig. \ref{fig:m5_diff}) tend to show a compatibility better than 0.1
+mag for g,r,i,z, and y band. One may also observe that $m_{5}^{OpSim}$
+is systematically lower than $m_{5}^{throughput}$
+
+\begin{figure*}[t]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{m5_diff.png}
+\caption{$\Delta m_5 = m_{5}^{throughput}-m_{5}^{OpSim}$ as a function of
+  the band. $m_{5}^{throughput}$ is estimated using \code{SMTN-002}
+  throughput (eq. 41 in \cite{LSE-40}), whereas $m_{5}^{OpSim}$ is
+  computed using the parametric equation of chapter 8 in \cite{SMTN-002}}
+\label{fig:m5_diff}
+\end{center}
+\end{figure*}
+
+There are two ways to estimate a signal-to-noise ratio for a known
+magnitude signal. One is to use the throughput of the instrument (see
+eq. 41 of \cite{LSE-40}) and the other is to use $m_5$ with equation 5
+of \cite{2008arXiv0805.2366I}. We have also checked
+(fig. \ref{fig:ratio_snr}) that the resulting signal-to-noise
+ratios were compatible at better than 0.15\%.
+
+\begin{figure*}[t]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{ratio_snr.png}
+\caption{Signal-to-noise ratio (SNR$_{throughput}$/SNR$_{m_5}$) as a
+  function of the magnitude difference $\Delta m = m-m_5$ for
+  u,g,r,i,z, and y bands. SNR$_{throughput}$ is estimated using
+  \code{STMN-002} throughput and eq. 41 of \cite{LSE-40}. SNR$_{m_5}$
+  is estimated from eq. 5 of \cite{2008arXiv0805.2366I}}
+\label{fig:ratio_snr}
+\end{center}
+\end{figure*}
+
+It may be interesting to estimate $m5\sigma$ as a function
+of exposure time so as to predict the observation time required to
+reach a given depth. Figure \ref{fig:m5_expoTime} tend to show that an
+increase of 0.5 (1) magnitude in $m5\sigma$ requires to increase
+two-to-threefold (sixfold)  the default exposure time of 30 second.
+
 \begin{figure*}[t]
 \begin{center}
 \subfigure[$u$]{\includegraphics[width=0.48\linewidth]{m5_vs_expoTime_u.png}}
@@ -1418,11 +1470,7 @@ SMTN-002 and LSE-40 respectively.
 \end{center}
 \end{figure*}
 
-It may be interesting to estimate $m5\sigma$ as a function
-of exposure time so as to predict the observation time required to
-reach a given depth. Figure \ref{fig:m5_expoTime} tend to show that an
-increase of 0.5 (1) magnitude in $m5\sigma$ requires to increase
-two-to-threefold (sixfold)  the default exposure time of 30 second.
+
 
 \section{Additional figures}
 
